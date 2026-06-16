@@ -1,10 +1,4 @@
-const CACHE_NAME = "bupi-pgclc-v2-cache-v1";
-const FILES = ["./", "./index.html", "./manifest.json"];
-
-self.addEventListener("install", event => {
-  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(FILES)));
-});
-
-self.addEventListener("fetch", event => {
-  event.respondWith(caches.match(event.request).then(response => response || fetch(event.request)));
-});
+const CACHE='bupi-pgclc-v3-cache-v1';
+const ASSETS=['./','./index.html','./manifest.json'];
+self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS))));
+self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));

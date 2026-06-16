@@ -1,392 +1,111 @@
-<!DOCTYPE html>
-<html lang="th">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Bupi PGCLC Lab Assistant v2</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#1f2937">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#1d4ed8" />
+  <title>Bupi PGCLC Lab Assistant v3</title>
+  <link rel="manifest" href="manifest.json" />
   <style>
-    :root {
-      --bg:#f6f7fb; --card:#ffffff; --ink:#111827; --muted:#6b7280;
-      --blue:#2563eb; --blue2:#dbeafe; --green:#059669; --red:#dc2626;
-      --border:#e5e7eb; --shadow:0 8px 22px rgba(0,0,0,.08);
-    }
-    * { box-sizing:border-box; }
-    body {
-      margin:0; background:var(--bg); color:var(--ink);
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      padding-bottom:82px;
-    }
-    header {
-      background:#1f2937; color:white; padding:16px 16px 18px;
-      position:sticky; top:0; z-index:10;
-    }
-    header h1 { margin:0; font-size:20px; }
-    header p { margin:4px 0 0; color:#d1d5db; font-size:12px; }
-    main { padding:14px; max-width:760px; margin:auto; }
-    .card {
-      background:var(--card); border-radius:18px; padding:16px;
-      box-shadow:var(--shadow); margin-bottom:14px;
-    }
-    h2 { font-size:18px; margin:0 0 10px; }
-    h3 { font-size:15px; margin:18px 0 6px; }
-    label { display:block; margin-top:11px; font-weight:650; font-size:13px; }
-    input, select, textarea {
-      width:100%; padding:11px 12px; margin-top:5px;
-      border:1px solid #cfd4dc; border-radius:12px; font-size:16px;
-      background:white;
-    }
-    textarea { min-height:72px; }
-    button {
-      border:0; border-radius:13px; padding:12px 13px; font-size:15px;
-      font-weight:750; margin-top:10px;
-    }
-    .primary { background:var(--blue); color:white; width:100%; }
-    .secondary { background:#e5e7eb; color:#111827; width:100%; }
-    .danger { background:#fee2e2; color:#991b1b; width:100%; }
-    .mini { width:auto; padding:8px 10px; font-size:13px; margin-right:6px; }
-    .result {
-      background:#eef4ff; border-radius:14px; padding:13px; margin-top:13px;
-      line-height:1.65; font-size:14px;
-    }
-    .hint { color:var(--muted); font-size:12px; line-height:1.45; }
-    .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
-    .pill {
-      display:inline-block; padding:4px 9px; border-radius:999px;
-      background:var(--blue2); color:#1d4ed8; font-size:12px; font-weight:750;
-      margin:2px 4px 2px 0;
-    }
-    .page { display:none; }
-    .page.active { display:block; }
-    nav {
-      position:fixed; bottom:0; left:0; right:0; z-index:20;
-      background:white; border-top:1px solid var(--border);
-      display:grid; grid-template-columns:repeat(5,1fr);
-      padding-bottom:env(safe-area-inset-bottom);
-    }
-    nav button {
-      background:white; color:#6b7280; border-radius:0; margin:0; padding:9px 2px;
-      font-size:11px; font-weight:700;
-    }
-    nav button.active { color:var(--blue); background:#eff6ff; }
-    .big { font-size:22px; font-weight:850; }
-    table { width:100%; border-collapse:collapse; font-size:12px; }
-    th,td { border-bottom:1px solid #eee; padding:7px; text-align:left; vertical-align:top; }
-    th { background:#f9fafb; position:sticky; top:0; }
-    .scroll { overflow-x:auto; max-height:460px; }
-    .ok { color:var(--green); font-weight:800; }
-    .warn { color:#b45309; font-weight:800; }
-    .bad { color:var(--red); font-weight:800; }
+    :root{--bg:#f5f7fb;--card:#fff;--ink:#0f172a;--muted:#64748b;--blue:#2563eb;--blue2:#dbeafe;--line:#e2e8f0;--warn:#f59e0b;--good:#16a34a;--bad:#dc2626}
+    *{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    header{background:#1e293b;color:#fff;padding:18px 20px} header h1{margin:0;font-size:22px} header p{margin:6px 0 0;color:#cbd5e1;font-weight:600}
+    main{max-width:920px;margin:0 auto;padding:18px}.card{background:var(--card);border-radius:22px;padding:20px;margin:16px 0;box-shadow:0 12px 30px rgba(15,23,42,.08)}
+    h2{margin:0 0 12px;font-size:22px}.muted{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.stat{background:#eef4ff;padding:18px;border-radius:16px}.stat b{font-size:28px;display:block}.tabs{display:flex;gap:8px;overflow:auto;padding:8px 0 2px}.tab{border:0;border-radius:999px;background:#e2e8f0;color:#0f172a;padding:10px 14px;font-weight:800}.tab.active{background:var(--blue);color:white}
+    label{display:block;font-weight:800;margin:12px 0 6px} input,select,textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;font:inherit;background:white} textarea{min-height:80px}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.btn{width:100%;border:0;border-radius:16px;background:var(--blue);color:#fff;padding:14px 16px;font-weight:900;font-size:16px;margin-top:12px}.btn.secondary{background:#334155}.btn.light{background:#dbeafe;color:#1d4ed8}.btn.danger{background:#ef4444}.smallbtn{border:0;border-radius:999px;background:#dbeafe;color:#1d4ed8;padding:8px 10px;font-weight:800;margin:4px}.pill{display:inline-block;border-radius:999px;padding:6px 10px;background:#e2e8f0;margin:3px;font-weight:800}.pill.good{background:#dcfce7;color:#166534}.pill.warn{background:#fef3c7;color:#92400e}.pill.bad{background:#fee2e2;color:#991b1b}.item{border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0;background:#fff}.hide{display:none}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.result{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:12px;white-space:pre-wrap}.footer{font-size:12px;color:var(--muted);text-align:center;margin:22px}
+    @media(max-width:640px){.row{grid-template-columns:1fr} main{padding:12px}.card{border-radius:18px;padding:16px} header h1{font-size:20px}}
   </style>
 </head>
 <body>
-<header>
-  <h1>Bupi PGCLC Lab Assistant v2</h1>
-  <p>Mobile-first PWA · Bupi Shortcut™ · REV1-dTAG batch tracker</p>
-</header>
-
+<header><h1>Bupi PGCLC Lab Assistant v3</h1><p>Local database · Batch-first · Optional upstream records · Export/Backup</p></header>
 <main>
-  <section id="home" class="page active">
-    <div class="card">
-      <h2>Dashboard</h2>
-      <div class="hint">ใช้ Batch ID เป็นตัวเชื่อม iPSC → iMeLC → PGCLC → FACS → Differentiation Culture (c day)</div>
-      <div id="homeSummary" class="result"></div>
-      <button class="primary" onclick="showPage('batch')">+ New / Edit Batch</button>
-    </div>
-    <div class="card">
-      <h2>Recent Batches</h2>
-      <div id="recentBatches"></div>
-    </div>
+  <section class="card">
+    <h2>Dashboard</h2><p class="muted">Batch ID connects iPSC → iMeLC → PGCLC → FACS. You can enter FACS first and fill upstream data later.</p>
+    <div class="grid" id="stats"></div>
+    <button class="btn" onclick="showTab('batch')">+ New / Edit Batch</button>
+  </section>
+  <div class="tabs">
+    <button class="tab active" id="t-dashboard" onclick="showTab('dashboard')">Home</button>
+    <button class="tab" id="t-batch" onclick="showTab('batch')">Batch</button>
+    <button class="tab" id="t-cell" onclick="showTab('cell')">Cell Count</button>
+    <button class="tab" id="t-seeding" onclick="showTab('seeding')">Seeding</button>
+    <button class="tab" id="t-timeline" onclick="showTab('timeline')">Timeline</button>
+    <button class="tab" id="t-facs" onclick="showTab('facs')">FACS</button>
+    <button class="tab" id="t-export" onclick="showTab('export')">Export</button>
+  </div>
+
+  <section class="card view" id="dashboard"><h2>Recent Batches</h2><input id="search" placeholder="Search Batch ID, clone, genotype, notes..." oninput="render()"><div id="batchList"></div></section>
+
+  <section class="card view hide" id="batch"><h2>Batch Database</h2>
+    <div class="row"><div><label>Batch ID *</label><input id="batchId" placeholder="REV1-049-PGCLC-001"></div><div><label>Date created</label><input id="batchDate" type="date"></div></div>
+    <div class="row"><div><label>Cell line</label><input id="cellLine" placeholder="NCLCN261"></div><div><label>Clone</label><input id="clone" placeholder="Clone49"></div></div>
+    <div class="row"><div><label>Genotype</label><select id="genotype"><option></option><option>WT</option><option>HET</option><option>HOM</option><option>KI-HOM</option><option>KI-HET</option></select></div><div><label>dTAG</label><input id="dtag" placeholder="DMSO / 50 nM / 100 nM"></div></div>
+    <label>Stage status</label><div class="row"><select id="ipscStatus"><option value="missing">iPSC missing</option><option value="done">iPSC done</option></select><select id="imelcStatus"><option value="missing">iMeLC missing</option><option value="done">iMeLC done</option></select></div>
+    <div class="row"><select id="pgclcStatus"><option value="missing">PGCLC missing</option><option value="done">PGCLC done</option></select><select id="facsStatus"><option value="missing">FACS missing</option><option value="done">FACS done</option></select></div>
+    <label>Notes</label><textarea id="notes" placeholder="Optional details. Upstream records can be filled later."></textarea>
+    <button class="btn" onclick="saveBatch()">Save Batch</button><button class="btn danger" onclick="deleteBatch()">Delete Batch</button>
   </section>
 
-  <section id="batch" class="page">
-    <div class="card">
-      <h2>Batch Setup</h2>
-      <label>Batch ID</label>
-      <input id="batch_id" placeholder="REV1dTAG49_DMSO_20260616_A">
-      <div class="grid2">
-        <div>
-          <label>Cell line</label>
-          <select id="cell_line">
-            <option>WT</option><option>REV1-dTAG #49</option><option>REV1-dTAG #52</option>
-            <option>REV1 KO</option><option>REV7 KO</option><option>Custom</option>
-          </select>
-        </div>
-        <div>
-          <label>Sex of line</label>
-          <select id="sex_line" onchange="applySexDefault()">
-            <option>Female</option><option>Male</option><option>Unknown</option>
-          </select>
-        </div>
-      </div>
-      <label>Treatment / condition</label>
-      <select id="treatment">
-        <option>DMSO</option><option>dTAG10</option><option>dTAG50</option>
-        <option>dTAG100</option><option>MMC</option><option>UV</option><option>Custom</option>
-      </select>
-      <label>Operator</label><input id="operator" value="Bupi">
-      <label>iPSC seeding date/time = Day 0</label><input id="start_dt" type="datetime-local">
-      <div class="grid2">
-        <div><label>iPSC growth days</label><input id="ipsc_days" type="number" value="6" step="0.25"></div>
-        <div><label>iMeLC duration (hr)</label><input id="imelc_hours" type="number" value="54"></div>
-      </div>
-      <label>PGCLC induction duration (days)</label><input id="pgclc_days" type="number" value="6" step="0.25">
-      <label>Notes</label><textarea id="batch_notes"></textarea>
-      <button class="primary" onclick="saveBatch()">Save Batch + Calculate Timeline</button>
-      <div id="timelineResult" class="result"></div>
-    </div>
+  <section class="card view hide" id="cell"><h2>Bupi Shortcut™ Cell Count</h2>
+    <div class="row"><div><label>Batch ID</label><input id="ccBatch" list="batchIds"></div><div><label>Quadrants counted</label><input id="quadrants" type="number" value="2"></div></div>
+    <div class="row"><div><label>Q1 cells</label><input id="q1" type="number"></div><div><label>Q2 cells</label><input id="q2" type="number"></div></div>
+    <div class="row"><div><label>Cells volume (µL)</label><input id="cellVol" type="number" value="7"></div><div><label>Trypan Blue (µL)</label><input id="tbVol" type="number" value="7"></div></div>
+    <button class="btn" onclick="calcCellCount()">Calculate & Save</button><div class="result" id="ccResult"></div>
   </section>
 
-  <section id="count" class="page">
-    <div class="card">
-      <h2>Cell Count · Bupi Shortcut™</h2>
-      <div class="hint">Default: cells 7 µL + Trypan Blue 7 µL, count 2 quadrants. cells/mL = (Q1+Q2) × 10⁴</div>
-      <label>Batch ID</label><input id="count_batch">
-      <div class="grid2">
-        <div><label>Q1</label><input id="q1" type="number" value="20"></div>
-        <div><label>Q2</label><input id="q2" type="number" value="20"></div>
-      </div>
-      <label>Resuspension volume (µL)</label><input id="resus_ul" type="number" value="1000">
-      <button class="primary" onclick="calcAndSaveCount()">Calculate + Save</button>
-      <div id="countResult" class="result"></div>
-    </div>
+  <section class="card view hide" id="seeding"><h2>PGCLC Seeding Calculator</h2>
+    <div class="row"><div><label>Batch ID</label><input id="seedBatch" list="batchIds"></div><div><label>Target cells / well</label><input id="targetCells" type="number" value="5000"></div></div>
+    <div class="row"><div><label>Number of wells</label><input id="wells" type="number" value="1"></div><div><label>Final volume / well (µL)</label><input id="finalVol" type="number" value="100"></div></div>
+    <div class="row"><div><label>Cell concentration (cells/mL)</label><input id="seedConc" type="number"></div><div><label>Extra (%)</label><input id="extraPct" type="number" value="10"></div></div>
+    <button class="btn" onclick="calcSeeding()">Calculate & Save</button><div class="result" id="seedResult"></div>
   </section>
 
-  <section id="calc" class="page">
-    <div class="card">
-      <h2>PGCLC / Differentiation Seeding</h2>
-      <label>Batch ID</label><input id="seed_batch">
-      <label>Cells/µL</label><input id="seed_cells_ul" type="number" placeholder="auto or enter">
-      <div class="grid2">
-        <div><label>Target cells/well</label><input id="target_per_well" type="number" value="5000"></div>
-        <div><label>Final volume/well (µL)</label><input id="final_per_well" type="number" value="100"></div>
-      </div>
-      <div class="grid2">
-        <div><label>Desired wells</label><input id="desired_wells" type="number" value="60"></div>
-        <div><label>Extra wells</label><input id="extra_wells" type="number" value="10"></div>
-      </div>
-      <label>Aggregate / well harvested count</label><input id="aggregate_no" type="number" placeholder="for PGCLC/aggregate later">
-      <button class="primary" onclick="calcAndSaveSeeding()">Calculate + Save Recipe</button>
-      <div id="seedResult" class="result"></div>
-    </div>
-
-    <div class="card">
-      <h2>Dilution Passage / Split Event</h2>
-      <label>Batch ID</label><input id="split_batch">
-      <label>Culture day (c)</label><input id="split_cday" placeholder="c40 / c82">
-      <label>Cells counted in one well</label><input id="split_cells" type="number" value="20000">
-      <div class="grid2">
-        <div>
-          <label>Split ratio</label>
-          <select id="split_ratio"><option value="2">1→2</option><option value="4" selected>1→4</option><option value="6">1→6</option><option value="8">1→8</option></select>
-        </div>
-        <div><label>Transfer volume/well (µL)</label><input id="transfer_ul" type="number" value="30"></div>
-      </div>
-      <label>Accumax (µL)</label><input id="accumax_ul" type="number" value="30">
-      <button class="primary" onclick="calcAndSaveSplit()">Calculate + Save Split</button>
-      <div id="splitResult" class="result"></div>
-    </div>
+  <section class="card view hide" id="timeline"><h2>Culture Timeline Calculator</h2>
+    <div class="row"><div><label>Batch ID</label><input id="tlBatch" list="batchIds"></div><div><label>Day 0 iPSC date</label><input id="day0" type="datetime-local"></div></div>
+    <div class="row"><div><label>iPSC growth days</label><input id="growthDays" type="number" value="6"></div><div><label>iMeLC duration (hours)</label><input id="imelcHours" type="number" value="54"></div></div>
+    <div class="row"><div><label>PGCLC induction days</label><input id="pgclcDays" type="number" value="6"></div><div><label>Culture day label</label><input value="c day" disabled></div></div>
+    <button class="btn" onclick="calcTimeline()">Calculate & Save</button><div class="result" id="tlResult"></div>
   </section>
 
-  <section id="facs" class="page">
-    <div class="card">
-      <h2>FACS / Differentiation Culture</h2>
-      <label>Batch ID</label><input id="facs_batch">
-      <label>Date/time</label><input id="facs_dt" type="datetime-local">
-      <label>Culture day (c)</label><input id="facs_cday" placeholder="c12 / c27 / c82">
-      <label>Actual post-sort / total counted cells</label><input id="facs_total" type="number" placeholder="counting chamber result">
-      <div class="grid2">
-        <div><label>AG+/VT+ (%)</label><input id="agvtpp" type="number" step="0.01"></div>
-        <div><label>AG+/VT− (%)</label><input id="agp_vtn" type="number" step="0.01"></div>
-      </div>
-      <div class="grid2">
-        <div><label>AG−/VT+ (%)</label><input id="agn_vtp" type="number" step="0.01"></div>
-        <div><label>AG−/VT− (%)</label><input id="agn_vtn" type="number" step="0.01"></div>
-      </div>
-      <label>P12 / dedifferentiated cells (%)</label><input id="p12pct" type="number" step="0.01">
-      <label>Aggregates harvested</label><input id="facs_aggregates" type="number" placeholder="for PGCLC/aggregate">
-      <label>Notes</label><textarea id="facs_notes"></textarea>
-      <button class="primary" onclick="calcAndSaveFACS()">Calculate + Save FACS</button>
-      <div id="facsResult" class="result"></div>
-    </div>
+  <section class="card view hide" id="facs"><h2>FACS Log</h2>
+    <div class="row"><div><label>Batch ID *</label><input id="facsBatch" list="batchIds" placeholder="Can enter FACS first"></div><div><label>FACS date</label><input id="facsDate" type="date"></div></div>
+    <div class="row"><div><label>AG+ (%)</label><input id="ag" type="number" step="0.01"></div><div><label>VT+ (%)</label><input id="vt" type="number" step="0.01"></div></div>
+    <div class="row"><div><label>AG+VT+ (%)</label><input id="agvt" type="number" step="0.01"></div><div><label>Yield / cells</label><input id="yieldCells" type="number"></div></div>
+    <label>Comments</label><textarea id="facsNotes"></textarea><button class="btn" onclick="saveFACS()">Save FACS</button><div id="facsList"></div>
   </section>
 
-  <section id="data" class="page">
-    <div class="card">
-      <h2>Database / Export</h2>
-      <div class="hint">ข้อมูลเก็บใน browser เครื่องนี้ ควร Export CSV/JSON เป็นระยะ</div>
-      <button class="secondary" onclick="renderData()">Refresh</button>
-      <button class="secondary" onclick="exportCSV()">Export CSV</button>
-      <button class="secondary" onclick="exportJSON()">Export JSON backup</button>
-      <button class="danger" onclick="clearAll()">Clear All Data</button>
-    </div>
-    <div class="card">
-      <h2>Records</h2>
-      <div id="dataTable" class="scroll"></div>
-    </div>
+  <section class="card view hide" id="export"><h2>Export / Backup</h2>
+    <button class="btn" onclick="exportCSV('batches')">Export Batches CSV</button><button class="btn" onclick="exportCSV('facs')">Export FACS CSV</button><button class="btn" onclick="backupJSON()">Backup JSON</button>
+    <label>Restore JSON</label><input type="file" id="restoreFile" accept="application/json"><button class="btn secondary" onclick="restoreJSON()">Restore</button>
+    <button class="btn danger" onclick="clearAll()">Clear All Local Data</button>
   </section>
+  <datalist id="batchIds"></datalist><div class="footer">Data are stored locally in this browser. Use Backup JSON regularly.</div>
 </main>
-
-<nav>
-  <button id="nav_home" class="active" onclick="showPage('home')">Home</button>
-  <button id="nav_batch" onclick="showPage('batch')">Batch</button>
-  <button id="nav_count" onclick="showPage('count')">Count</button>
-  <button id="nav_calc" onclick="showPage('calc')">Calc</button>
-  <button id="nav_facs" onclick="showPage('facs')">FACS</button>
-</nav>
-
 <script>
-const STORE="bupi_pgclc_v2_records";
-
-function records(){ return JSON.parse(localStorage.getItem(STORE)||"[]"); }
-function setRecords(x){ localStorage.setItem(STORE, JSON.stringify(x)); }
-function addRecord(type, data){
-  const r=records();
-  r.push({ type, saved_at:new Date().toISOString(), ...data });
-  setRecords(r); updateHome(); renderData(false);
-}
-function showPage(id){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
-  const nb=document.getElementById("nav_"+id); if(nb) nb.classList.add("active");
-  if(id==="data") renderData();
-  if(id==="home") updateHome();
-}
-function fmtDate(d){ return d.toLocaleString([], {year:"numeric",month:"short",day:"2-digit",hour:"2-digit",minute:"2-digit"}); }
-function addHours(dt, h){ return new Date(dt.getTime()+h*3600*1000); }
-function addDays(dt, days){ return addHours(dt, days*24); }
-function val(id){ return document.getElementById(id).value; }
-function num(id){ return Number(val(id))||0; }
-
-function init(){
-  const now=new Date();
-  now.setMinutes(now.getMinutes()-now.getTimezoneOffset());
-  const s=now.toISOString().slice(0,16);
-  ["start_dt","facs_dt"].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=s; });
-  updateHome();
-  if("serviceWorker" in navigator){ navigator.serviceWorker.register("service-worker.js").catch(()=>{}); }
-}
-function applySexDefault(){
-  const sex=val("sex_line");
-  document.getElementById("imelc_hours").value = sex==="Female" ? 54 : 48;
-}
-function timelineFromInputs(){
-  const start=new Date(val("start_dt"));
-  const ipsc=num("ipsc_days"), imelc=num("imelc_hours"), pg=num("pgclc_days");
-  const imelcStart=addDays(start, ipsc);
-  const pgclcStart=addHours(imelcStart, imelc);
-  const facs=addDays(pgclcStart, pg);
-  return {start, imelcStart, pgclcStart, facs};
-}
-function saveBatch(){
-  const t=timelineFromInputs();
-  const batchId=val("batch_id");
-  addRecord("batch", {
-    batch_id:batchId, cell_line:val("cell_line"), sex:val("sex_line"),
-    treatment:val("treatment"), operator:val("operator"), start_datetime:val("start_dt"),
-    ipsc_growth_days:num("ipsc_days"), imelc_duration_hr:num("imelc_hours"),
-    pgclc_duration_days:num("pgclc_days"),
-    imelc_start:t.imelcStart.toISOString(), pgclc_start:t.pgclcStart.toISOString(), facs_due:t.facs.toISOString(),
-    notes:val("batch_notes")
-  });
-  document.getElementById("timelineResult").innerHTML =
-    `<span class="pill">${batchId}</span><br>
-    Day 0 iPSC: <b>${fmtDate(t.start)}</b><br>
-    Day ${num("ipsc_days")} iMeLC induction: <b>${fmtDate(t.imelcStart)}</b><br>
-    Day ${(num("ipsc_days")+num("imelc_hours")/24).toFixed(2)} PGCLC induction: <b>${fmtDate(t.pgclcStart)}</b><br>
-    FACS due: <b>${fmtDate(t.facs)}</b>`;
-}
-
-function calcAndSaveCount(){
-  const q1=num("q1"), q2=num("q2"), resus=num("resus_ul");
-  const total=q1+q2, cellsMl=total*10000, cellsUl=cellsMl/1000, totalCells=cellsUl*resus;
-  document.getElementById("countResult").innerHTML =
-    `Q1+Q2 = <b>${total}</b><br>
-    Cell concentration = <b>${cellsMl.toLocaleString()} cells/mL</b><br>
-    = <b>${cellsUl.toFixed(2)} cells/µL</b><br>
-    Total cells = <b>${Math.round(totalCells).toLocaleString()}</b>`;
-  document.getElementById("seed_cells_ul").value=cellsUl.toFixed(2);
-  addRecord("cell_count", { batch_id:val("count_batch"), q1, q2, resuspension_ul:resus, cells_per_ml:cellsMl, cells_per_ul:cellsUl, total_cells:totalCells, method:"Bupi Shortcut" });
-}
-function calcAndSaveSeeding(){
-  const cellsUl=num("seed_cells_ul"), target=num("target_per_well"), finalV=num("final_per_well");
-  const wells=num("desired_wells")+num("extra_wells");
-  const cellV=target/cellsUl, medV=finalV-cellV, totalCell=cellV*wells, totalMed=medV*wells;
-  const totalNeeded=target*wells;
-  const warning = medV < 0 ? `<br><span class="bad">Cell volume มากกว่า final volume/well</span>` : "";
-  document.getElementById("seedResult").innerHTML =
-    `Prepare wells: <b>${wells}</b><br>
-    Cells needed: <b>${totalNeeded.toLocaleString()}</b><br>
-    Cells: <b>${cellV.toFixed(2)} µL/well</b><br>
-    Medium: <b>${medV.toFixed(2)} µL/well</b>${warning}<br><br>
-    Master mix cells: <b>${totalCell.toFixed(2)} µL</b><br>
-    Master mix medium: <b>${totalMed.toFixed(2)} µL</b><br>
-    Total: <b>${(totalCell+totalMed).toFixed(2)} µL</b>`;
-  addRecord("seeding_recipe", { batch_id:val("seed_batch"), cells_per_ul:cellsUl, target_cells_per_well:target, final_volume_ul:finalV, desired_wells:num("desired_wells"), extra_wells:num("extra_wells"), total_wells:wells, cell_ul_per_well:cellV, medium_ul_per_well:medV, aggregate_no:val("aggregate_no") });
-}
-function calcAndSaveSplit(){
-  const cells=num("split_cells"), split=num("split_ratio"), transfer=num("transfer_ul"), accumax=num("accumax_ul");
-  const totalVol=split*transfer, medium=totalVol-accumax, newCells=cells/split;
-  document.getElementById("splitResult").innerHTML =
-    `Culture day: <b>${val("split_cday")}</b><br>
-    Split 1→<b>${split}</b><br>
-    Expected cells/new well: <b>${Math.round(newCells).toLocaleString()}</b><br>
-    Total volume after detach: <b>${totalVol} µL</b><br>
-    Accumax: <b>${accumax} µL</b><br>
-    Add medium: <b>${medium.toFixed(2)} µL</b>`;
-  addRecord("split_event", { batch_id:val("split_batch"), culture_day:val("split_cday"), cells_in_one_well:cells, split_ratio:"1:"+split, transfer_ul_per_well:transfer, accumax_ul:accumax, medium_to_add_ul:medium, expected_cells_per_new_well:newCells });
-}
-function calcAndSaveFACS(){
-  const total=num("facs_total"), agvt=num("agvtpp"), aggs=num("facs_aggregates");
-  const abs=total*agvt/100;
-  const perAgg = aggs ? total/aggs : "";
-  document.getElementById("facsResult").innerHTML =
-    `AG+/VT+ absolute count = <b>${Math.round(abs).toLocaleString()}</b><br>
-    Actual counted cells = <b>${Math.round(total).toLocaleString()}</b><br>
-    ${aggs ? `PGCLC/aggregate = <b>${perAgg.toFixed(2)}</b>` : `<span class="hint">ใส่ aggregates harvested เพื่อคำนวณ PGCLC/aggregate</span>`}`;
-  addRecord("facs_culture", {
-    batch_id:val("facs_batch"), datetime:val("facs_dt"), culture_day:val("facs_cday"),
-    actual_counted_cells:total, ag_pos_vt_pos_percent:agvt, ag_pos_vt_pos_absolute:abs,
-    ag_pos_vt_neg_percent:num("agp_vtn"), ag_neg_vt_pos_percent:num("agn_vtp"), ag_neg_vt_neg_percent:num("agn_vtn"),
-    p12_percent:num("p12pct"), aggregates_harvested:aggs, pgclc_per_aggregate:perAgg, notes:val("facs_notes")
-  });
-}
-function updateHome(){
-  const r=records();
-  const batches=r.filter(x=>x.type==="batch").slice(-5).reverse();
-  const facs=r.filter(x=>x.type==="facs_culture");
-  document.getElementById("homeSummary").innerHTML =
-    `<div class="big">${r.length}</div>records saved<br>
-     <span class="pill">${batches.length} recent batches</span>
-     <span class="pill">${facs.length} FACS records</span>`;
-  document.getElementById("recentBatches").innerHTML = batches.length ? batches.map(b =>
-    `<div class="result"><b>${b.batch_id}</b><br>${b.cell_line} · ${b.treatment}<br>
-    FACS due: ${b.facs_due ? fmtDate(new Date(b.facs_due)) : ""}</div>`).join("") : "<p class='hint'>No batch yet.</p>";
-}
-function renderData(){
-  const r=records();
-  if(!r.length){ document.getElementById("dataTable").innerHTML="<p class='hint'>No records yet.</p>"; return; }
-  const keys=[...new Set(r.flatMap(o=>Object.keys(o)))];
-  let html="<table><thead><tr>"+keys.map(k=>`<th>${k}</th>`).join("")+"</tr></thead><tbody>";
-  html+=r.map(o=>"<tr>"+keys.map(k=>`<td>${o[k]??""}</td>`).join("")+"</tr>").join("");
-  html+="</tbody></table>";
-  document.getElementById("dataTable").innerHTML=html;
-}
-function exportCSV(){
-  const r=records(); if(!r.length){ alert("No data"); return; }
-  const keys=[...new Set(r.flatMap(o=>Object.keys(o)))];
-  const csv=[keys.join(",")].concat(r.map(o=>keys.map(k=>`"${String(o[k]??"").replaceAll('"','""')}"`).join(","))).join("\n");
-  downloadBlob(csv, "bupi_pgclc_v2_records.csv", "text/csv;charset=utf-8;");
-}
-function exportJSON(){ downloadBlob(JSON.stringify(records(),null,2), "bupi_pgclc_v2_backup.json", "application/json"); }
-function downloadBlob(content, filename, type){
-  const blob=new Blob([content],{type}); const url=URL.createObjectURL(blob);
-  const a=document.createElement("a"); a.href=url; a.download=filename; a.click(); URL.revokeObjectURL(url);
-}
-function clearAll(){ if(confirm("Delete all local data?")){ localStorage.removeItem(STORE); updateHome(); renderData(); } }
-init();
+const KEY='bupi_pgclc_lab_v3';
+let db=load();
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||{batches:[],cellCounts:[],seedings:[],timelines:[],facs:[]}}catch(e){return{batches:[],cellCounts:[],seedings:[],timelines:[],facs:[]}}}
+function persist(){localStorage.setItem(KEY,JSON.stringify(db));render()}
+function val(id){return document.getElementById(id).value.trim()} function num(id){return parseFloat(val(id)||0)}
+function showTab(id){document.querySelectorAll('.view').forEach(x=>x.classList.add('hide'));document.getElementById(id).classList.remove('hide');document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));let t=document.getElementById('t-'+id); if(t)t.classList.add('active');render()}
+function saveBatch(){let id=val('batchId'); if(!id)return alert('Batch ID is required'); let b=db.batches.find(x=>x.id===id)||{id}; Object.assign(b,{date:val('batchDate'),cellLine:val('cellLine'),clone:val('clone'),genotype:val('genotype'),dtag:val('dtag'),ipscStatus:val('ipscStatus'),imelcStatus:val('imelcStatus'),pgclcStatus:val('pgclcStatus'),facsStatus:val('facsStatus'),notes:val('notes'),updated:new Date().toISOString()}); if(!db.batches.find(x=>x.id===id))db.batches.unshift(b); persist(); alert('Saved')}
+function deleteBatch(){let id=val('batchId'); if(!id||!confirm('Delete batch '+id+'?'))return; db.batches=db.batches.filter(x=>x.id!==id); persist()}
+function editBatch(id){let b=db.batches.find(x=>x.id===id); if(!b)return; ['batchId','batchDate','cellLine','clone','genotype','dtag','ipscStatus','imelcStatus','pgclcStatus','facsStatus','notes'].forEach(k=>{}); batchId.value=b.id; batchDate.value=b.date||''; cellLine.value=b.cellLine||''; clone.value=b.clone||''; genotype.value=b.genotype||''; dtag.value=b.dtag||''; ipscStatus.value=b.ipscStatus||'missing'; imelcStatus.value=b.imelcStatus||'missing'; pgclcStatus.value=b.pgclcStatus||'missing'; facsStatus.value=b.facsStatus||'missing'; notes.value=b.notes||''; showTab('batch')}
+function completion(b){let arr=[b.ipscStatus,b.imelcStatus,b.pgclcStatus,b.facsStatus]; return Math.round(arr.filter(x=>x==='done').length/4*100)}
+function calcCellCount(){let avg=(num('q1')+num('q2'))/Math.max(num('quadrants'),1); let dilution=(num('cellVol')+num('tbVol'))/Math.max(num('cellVol'),1); let cellsMl=avg*1e4*dilution; let rec={batchId:val('ccBatch'),date:new Date().toISOString(),q1:num('q1'),q2:num('q2'),quadrants:num('quadrants'),cellsMl}; db.cellCounts.unshift(rec); ccResult.textContent=`Average cells/quadrant: ${avg.toFixed(1)}\nDilution factor: ${dilution.toFixed(2)}\nConcentration: ${Math.round(cellsMl).toLocaleString()} cells/mL`; persist()}
+function calcSeeding(){let total=num('targetCells')*num('wells')*(1+num('extraPct')/100); let volCells=total/Math.max(num('seedConc'),1)*1000; let totalVol=num('finalVol')*num('wells')*(1+num('extraPct')/100); let medium=Math.max(totalVol-volCells,0); db.seedings.unshift({batchId:val('seedBatch'),date:new Date().toISOString(),total,volCells,medium}); seedResult.textContent=`Total cells needed: ${Math.round(total).toLocaleString()}\nCell suspension: ${volCells.toFixed(2)} µL\nMedium: ${medium.toFixed(2)} µL\nTotal volume: ${totalVol.toFixed(2)} µL`; persist()}
+function addHours(d,h){let x=new Date(d); x.setHours(x.getHours()+h); return x} function fmt(d){return d.toLocaleString()}
+function calcTimeline(){let d0=new Date(val('day0')); if(isNaN(d0))return alert('Please enter Day 0'); let imelcStart=addHours(d0,num('growthDays')*24); let pgclcStart=addHours(imelcStart,num('imelcHours')); let facs=addHours(pgclcStart,num('pgclcDays')*24); db.timelines.unshift({batchId:val('tlBatch'),day0:val('day0'),imelcStart,pgclcStart,facs}); tlResult.textContent=`Day 0 iPSC: ${fmt(d0)}\niMeLC induction: ${fmt(imelcStart)}\nPGCLC induction / c0: ${fmt(pgclcStart)}\nFACS / c${num('pgclcDays')}: ${fmt(facs)}`; persist()}
+function saveFACS(){let id=val('facsBatch'); if(!id)return alert('Batch ID is required'); db.facs.unshift({batchId:id,date:val('facsDate'),ag:num('ag'),vt:num('vt'),agvt:num('agvt'),yieldCells:num('yieldCells'),notes:val('facsNotes'),created:new Date().toISOString()}); let b=db.batches.find(x=>x.id===id); if(b)b.facsStatus='done'; persist(); alert('FACS saved')}
+function render(){let total=db.batches.length, facs=db.facs.length, complete=db.batches.filter(b=>completion(b)===100).length, missing=db.batches.filter(b=>completion(b)<100).length; stats.innerHTML=`<div class=stat><b>${total}</b>Batches</div><div class=stat><b>${facs}</b>FACS records</div><div class=stat><b>${complete}</b>Complete</div><div class=stat><b>${missing}</b>Incomplete</div>`; batchIds.innerHTML=db.batches.map(b=>`<option value="${b.id}">`).join(''); let q=(search?.value||'').toLowerCase(); batchList.innerHTML=db.batches.filter(b=>JSON.stringify(b).toLowerCase().includes(q)).map(b=>{let c=completion(b);return `<div class=item><b class=mono>${b.id}</b><br><span class=muted>${b.cellLine||''} ${b.clone||''} ${b.genotype||''} ${b.dtag||''}</span><br><span class="pill ${b.ipscStatus==='done'?'good':'warn'}">iPSC ${b.ipscStatus}</span><span class="pill ${b.imelcStatus==='done'?'good':'warn'}">iMeLC ${b.imelcStatus}</span><span class="pill ${b.pgclcStatus==='done'?'good':'warn'}">PGCLC ${b.pgclcStatus}</span><span class="pill ${b.facsStatus==='done'?'good':'warn'}">FACS ${b.facsStatus}</span><span class="pill ${c===100?'good':'bad'}">${c}%</span><br><button class=smallbtn onclick="editBatch('${b.id}')">Edit</button></div>`}).join('')||'<p class=muted>No batch yet.</p>'; facsList.innerHTML=db.facs.slice(0,20).map(f=>`<div class=item><b>${f.batchId}</b> · ${f.date||''}<br>AG+ ${f.ag}% · VT+ ${f.vt}% · AG+VT+ ${f.agvt}% · Yield ${f.yieldCells||''}<br><span class=muted>${f.notes||''}</span></div>`).join('')}
+function csv(rows){if(!rows.length)return ''; let keys=[...new Set(rows.flatMap(Object.keys))]; return [keys.join(','),...rows.map(r=>keys.map(k=>'"'+String(r[k]??'').replaceAll('"','""')+'"').join(','))].join('\n')}
+function download(name,text,type='text/plain'){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();URL.revokeObjectURL(a.href)}
+function exportCSV(kind){download(`bupi_${kind}.csv`,csv(db[kind]||[]),'text/csv')}
+function backupJSON(){download('bupi_pgclc_lab_backup.json',JSON.stringify(db,null,2),'application/json')}
+function restoreJSON(){let f=restoreFile.files[0]; if(!f)return alert('Choose JSON'); let r=new FileReader(); r.onload=()=>{try{db=JSON.parse(r.result);persist();alert('Restored')}catch(e){alert('Invalid JSON')}}; r.readAsText(f)}
+function clearAll(){if(confirm('Clear all local data? Backup first.')){localStorage.removeItem(KEY);db=load();render()}}
+if('serviceWorker' in navigator){navigator.serviceWorker.register('service-worker.js').catch(()=>{})}
+render();
 </script>
 </body>
 </html>

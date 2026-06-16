@@ -1,111 +1,320 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="th">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#1d4ed8" />
-  <title>Bupi PGCLC Lab Assistant v3</title>
-  <link rel="manifest" href="manifest.json" />
-  <style>
-    :root{--bg:#f5f7fb;--card:#fff;--ink:#0f172a;--muted:#64748b;--blue:#2563eb;--blue2:#dbeafe;--line:#e2e8f0;--warn:#f59e0b;--good:#16a34a;--bad:#dc2626}
-    *{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
-    header{background:#1e293b;color:#fff;padding:18px 20px} header h1{margin:0;font-size:22px} header p{margin:6px 0 0;color:#cbd5e1;font-weight:600}
-    main{max-width:920px;margin:0 auto;padding:18px}.card{background:var(--card);border-radius:22px;padding:20px;margin:16px 0;box-shadow:0 12px 30px rgba(15,23,42,.08)}
-    h2{margin:0 0 12px;font-size:22px}.muted{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.stat{background:#eef4ff;padding:18px;border-radius:16px}.stat b{font-size:28px;display:block}.tabs{display:flex;gap:8px;overflow:auto;padding:8px 0 2px}.tab{border:0;border-radius:999px;background:#e2e8f0;color:#0f172a;padding:10px 14px;font-weight:800}.tab.active{background:var(--blue);color:white}
-    label{display:block;font-weight:800;margin:12px 0 6px} input,select,textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;font:inherit;background:white} textarea{min-height:80px}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.btn{width:100%;border:0;border-radius:16px;background:var(--blue);color:#fff;padding:14px 16px;font-weight:900;font-size:16px;margin-top:12px}.btn.secondary{background:#334155}.btn.light{background:#dbeafe;color:#1d4ed8}.btn.danger{background:#ef4444}.smallbtn{border:0;border-radius:999px;background:#dbeafe;color:#1d4ed8;padding:8px 10px;font-weight:800;margin:4px}.pill{display:inline-block;border-radius:999px;padding:6px 10px;background:#e2e8f0;margin:3px;font-weight:800}.pill.good{background:#dcfce7;color:#166534}.pill.warn{background:#fef3c7;color:#92400e}.pill.bad{background:#fee2e2;color:#991b1b}.item{border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0;background:#fff}.hide{display:none}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.result{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:12px;white-space:pre-wrap}.footer{font-size:12px;color:var(--muted);text-align:center;margin:22px}
-    @media(max-width:640px){.row{grid-template-columns:1fr} main{padding:12px}.card{border-radius:18px;padding:16px} header h1{font-size:20px}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Bupi PGCLC Lab Assistant v3</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1f2937">
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--ink:#111827;--muted:#6b7280;--blue:#2563eb;--blue2:#dbeafe;--border:#e5e7eb;--red:#dc2626;--green:#059669;--shadow:0 8px 22px rgba(0,0,0,.08)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:86px}
+header{background:#1f2937;color:#fff;padding:16px;position:sticky;top:0;z-index:10}
+header h1{font-size:20px;margin:0}
+header p{margin:5px 0 0;color:#d1d5db;font-size:12px}
+main{padding:14px;max-width:820px;margin:auto}
+.card{background:var(--card);border-radius:18px;padding:16px;box-shadow:var(--shadow);margin-bottom:14px}
+h2{font-size:18px;margin:0 0 10px}
+label{display:block;margin-top:11px;font-weight:650;font-size:13px}
+input,select,textarea{width:100%;padding:11px 12px;margin-top:5px;border:1px solid #cfd4dc;border-radius:12px;font-size:16px;background:white}
+textarea{min-height:70px}
+button{border:0;border-radius:13px;padding:12px 13px;font-size:15px;font-weight:750;margin-top:10px}
+.primary{background:var(--blue);color:white;width:100%}
+.secondary{background:#e5e7eb;color:#111827;width:100%}
+.danger{background:#fee2e2;color:#991b1b;width:100%}
+.result{background:#eef4ff;border-radius:14px;padding:13px;margin-top:13px;line-height:1.65;font-size:14px}
+.hint{color:var(--muted);font-size:12px;line-height:1.45}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.pill{display:inline-block;padding:4px 9px;border-radius:999px;background:var(--blue2);color:#1d4ed8;font-size:12px;font-weight:750;margin:2px 4px 2px 0}
+.page{display:none}.page.active{display:block}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:20;background:white;border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(6,1fr);padding-bottom:env(safe-area-inset-bottom)}
+nav button{background:white;color:#6b7280;border-radius:0;margin:0;padding:9px 1px;font-size:10.5px;font-weight:700}
+nav button.active{color:var(--blue);background:#eff6ff}
+.big{font-size:22px;font-weight:850}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{border-bottom:1px solid #eee;padding:7px;text-align:left;vertical-align:top}
+th{background:#f9fafb;position:sticky;top:0}
+.scroll{overflow-x:auto;max-height:470px}
+.bad{color:var(--red);font-weight:800}
+</style>
 </head>
 <body>
-<header><h1>Bupi PGCLC Lab Assistant v3</h1><p>Local database · Batch-first · Optional upstream records · Export/Backup</p></header>
+<header>
+<h1>Bupi PGCLC Lab Assistant v3</h1>
+<p>Suggested Batch ID · Expansion Culture · c1→c365 Dilution Passage · Bupi Shortcut™</p>
+</header>
+
 <main>
-  <section class="card">
-    <h2>Dashboard</h2><p class="muted">Batch ID connects iPSC → iMeLC → PGCLC → FACS. You can enter FACS first and fill upstream data later.</p>
-    <div class="grid" id="stats"></div>
-    <button class="btn" onclick="showTab('batch')">+ New / Edit Batch</button>
-  </section>
-  <div class="tabs">
-    <button class="tab active" id="t-dashboard" onclick="showTab('dashboard')">Home</button>
-    <button class="tab" id="t-batch" onclick="showTab('batch')">Batch</button>
-    <button class="tab" id="t-cell" onclick="showTab('cell')">Cell Count</button>
-    <button class="tab" id="t-seeding" onclick="showTab('seeding')">Seeding</button>
-    <button class="tab" id="t-timeline" onclick="showTab('timeline')">Timeline</button>
-    <button class="tab" id="t-facs" onclick="showTab('facs')">FACS</button>
-    <button class="tab" id="t-export" onclick="showTab('export')">Export</button>
-  </div>
+<section id="home" class="page active">
+<div class="card">
+<h2>Dashboard</h2>
+<div class="hint">หลัง FACS ใช้ Culture Day เช่น c1, c12, c40, c82, c365 เป็นแกนหลัก</div>
+<div id="homeSummary" class="result"></div>
+<button class="primary" onclick="showPage('batch')">+ New Batch</button>
+</div>
+<div class="card">
+<h2>Recent Batches</h2>
+<div id="recentBatches"></div>
+</div>
+</section>
 
-  <section class="card view" id="dashboard"><h2>Recent Batches</h2><input id="search" placeholder="Search Batch ID, clone, genotype, notes..." oninput="render()"><div id="batchList"></div></section>
+<section id="batch" class="page">
+<div class="card">
+<h2>Batch Setup + Suggested Batch ID</h2>
+<div class="hint">ตัวอย่าง: REV1-049-PGCLC-001-01 = medium, -02 = DMSO, -03 = dTAG</div>
 
-  <section class="card view hide" id="batch"><h2>Batch Database</h2>
-    <div class="row"><div><label>Batch ID *</label><input id="batchId" placeholder="REV1-049-PGCLC-001"></div><div><label>Date created</label><input id="batchDate" type="date"></div></div>
-    <div class="row"><div><label>Cell line</label><input id="cellLine" placeholder="NCLCN261"></div><div><label>Clone</label><input id="clone" placeholder="Clone49"></div></div>
-    <div class="row"><div><label>Genotype</label><select id="genotype"><option></option><option>WT</option><option>HET</option><option>HOM</option><option>KI-HOM</option><option>KI-HET</option></select></div><div><label>dTAG</label><input id="dtag" placeholder="DMSO / 50 nM / 100 nM"></div></div>
-    <label>Stage status</label><div class="row"><select id="ipscStatus"><option value="missing">iPSC missing</option><option value="done">iPSC done</option></select><select id="imelcStatus"><option value="missing">iMeLC missing</option><option value="done">iMeLC done</option></select></div>
-    <div class="row"><select id="pgclcStatus"><option value="missing">PGCLC missing</option><option value="done">PGCLC done</option></select><select id="facsStatus"><option value="missing">FACS missing</option><option value="done">FACS done</option></select></div>
-    <label>Notes</label><textarea id="notes" placeholder="Optional details. Upstream records can be filled later."></textarea>
-    <button class="btn" onclick="saveBatch()">Save Batch</button><button class="btn danger" onclick="deleteBatch()">Delete Batch</button>
-  </section>
+<label>Batch prefix</label>
+<select id="id_prefix" onchange="suggestBatchId()">
+<option value="REV1-049-PGCLC">REV1-049-PGCLC</option>
+<option value="REV1-052-PGCLC">REV1-052-PGCLC</option>
+<option value="WT-NCLCN261-PGCLC">WT-NCLCN261-PGCLC</option>
+<option value="CUSTOM">Custom</option>
+</select>
+<label>Custom prefix</label>
+<input id="custom_prefix" placeholder="e.g. REV7-001-PGCLC" oninput="suggestBatchId()">
 
-  <section class="card view hide" id="cell"><h2>Bupi Shortcut™ Cell Count</h2>
-    <div class="row"><div><label>Batch ID</label><input id="ccBatch" list="batchIds"></div><div><label>Quadrants counted</label><input id="quadrants" type="number" value="2"></div></div>
-    <div class="row"><div><label>Q1 cells</label><input id="q1" type="number"></div><div><label>Q2 cells</label><input id="q2" type="number"></div></div>
-    <div class="row"><div><label>Cells volume (µL)</label><input id="cellVol" type="number" value="7"></div><div><label>Trypan Blue (µL)</label><input id="tbVol" type="number" value="7"></div></div>
-    <button class="btn" onclick="calcCellCount()">Calculate & Save</button><div class="result" id="ccResult"></div>
-  </section>
+<div class="grid2">
+<div><label>Main batch number</label><input id="main_batch_no" type="number" value="1" oninput="suggestBatchId()"></div>
+<div><label>Sub-batch number</label><input id="sub_batch_no" type="number" value="1" oninput="suggestBatchId()"></div>
+</div>
 
-  <section class="card view hide" id="seeding"><h2>PGCLC Seeding Calculator</h2>
-    <div class="row"><div><label>Batch ID</label><input id="seedBatch" list="batchIds"></div><div><label>Target cells / well</label><input id="targetCells" type="number" value="5000"></div></div>
-    <div class="row"><div><label>Number of wells</label><input id="wells" type="number" value="1"></div><div><label>Final volume / well (µL)</label><input id="finalVol" type="number" value="100"></div></div>
-    <div class="row"><div><label>Cell concentration (cells/mL)</label><input id="seedConc" type="number"></div><div><label>Extra (%)</label><input id="extraPct" type="number" value="10"></div></div>
-    <button class="btn" onclick="calcSeeding()">Calculate & Save</button><div class="result" id="seedResult"></div>
-  </section>
+<label>Condition</label>
+<select id="condition_label" onchange="setSubBatchFromCondition(); suggestBatchId();">
+<option value="medium">medium ปกติ → -01</option>
+<option value="DMSO">DMSO → -02</option>
+<option value="dTAG">dTAG → -03</option>
+<option value="custom">custom</option>
+</select>
 
-  <section class="card view hide" id="timeline"><h2>Culture Timeline Calculator</h2>
-    <div class="row"><div><label>Batch ID</label><input id="tlBatch" list="batchIds"></div><div><label>Day 0 iPSC date</label><input id="day0" type="datetime-local"></div></div>
-    <div class="row"><div><label>iPSC growth days</label><input id="growthDays" type="number" value="6"></div><div><label>iMeLC duration (hours)</label><input id="imelcHours" type="number" value="54"></div></div>
-    <div class="row"><div><label>PGCLC induction days</label><input id="pgclcDays" type="number" value="6"></div><div><label>Culture day label</label><input value="c day" disabled></div></div>
-    <button class="btn" onclick="calcTimeline()">Calculate & Save</button><div class="result" id="tlResult"></div>
-  </section>
+<button class="secondary" onclick="suggestBatchId()">Generate Suggested Batch ID</button>
+<div id="batchSuggest" class="result"></div>
 
-  <section class="card view hide" id="facs"><h2>FACS Log</h2>
-    <div class="row"><div><label>Batch ID *</label><input id="facsBatch" list="batchIds" placeholder="Can enter FACS first"></div><div><label>FACS date</label><input id="facsDate" type="date"></div></div>
-    <div class="row"><div><label>AG+ (%)</label><input id="ag" type="number" step="0.01"></div><div><label>VT+ (%)</label><input id="vt" type="number" step="0.01"></div></div>
-    <div class="row"><div><label>AG+VT+ (%)</label><input id="agvt" type="number" step="0.01"></div><div><label>Yield / cells</label><input id="yieldCells" type="number"></div></div>
-    <label>Comments</label><textarea id="facsNotes"></textarea><button class="btn" onclick="saveFACS()">Save FACS</button><div id="facsList"></div>
-  </section>
+<label>Batch ID</label><input id="batch_id" placeholder="REV1-049-PGCLC-001-01">
 
-  <section class="card view hide" id="export"><h2>Export / Backup</h2>
-    <button class="btn" onclick="exportCSV('batches')">Export Batches CSV</button><button class="btn" onclick="exportCSV('facs')">Export FACS CSV</button><button class="btn" onclick="backupJSON()">Backup JSON</button>
-    <label>Restore JSON</label><input type="file" id="restoreFile" accept="application/json"><button class="btn secondary" onclick="restoreJSON()">Restore</button>
-    <button class="btn danger" onclick="clearAll()">Clear All Local Data</button>
-  </section>
-  <datalist id="batchIds"></datalist><div class="footer">Data are stored locally in this browser. Use Backup JSON regularly.</div>
+<div class="grid2">
+<div>
+<label>Cell line</label>
+<select id="cell_line">
+<option>REV1-dTAG #49</option><option>REV1-dTAG #52</option><option>WT-NCLCN261</option><option>REV1 KO</option><option>REV7 KO</option><option>Custom</option>
+</select>
+</div>
+<div>
+<label>Sex of line</label>
+<select id="sex_line" onchange="applySexDefault()"><option>Female</option><option>Male</option><option>Unknown</option></select>
+</div>
+</div>
+
+<label>iPSC seeding date/time = Day 0</label><input id="start_dt" type="datetime-local">
+<div class="grid2">
+<div><label>iPSC growth days</label><input id="ipsc_days" type="number" value="6" step="0.25"></div>
+<div><label>iMeLC duration (hr)</label><input id="imelc_hours" type="number" value="54"></div>
+</div>
+<label>PGCLC induction duration (days)</label><input id="pgclc_days" type="number" value="6" step="0.25">
+<label>Notes</label><textarea id="batch_notes"></textarea>
+<button class="primary" onclick="saveBatch()">Save Batch + Timeline</button>
+<div id="timelineResult" class="result"></div>
+</div>
+</section>
+
+<section id="count" class="page">
+<div class="card">
+<h2>Cell Count · Bupi Shortcut™</h2>
+<div class="hint">Cells 7 µL + Trypan Blue 7 µL, count 2 quadrants. cells/mL = (Q1+Q2) × 10⁴</div>
+<label>Batch ID</label><input id="count_batch">
+<div class="grid2">
+<div><label>Q1</label><input id="q1" type="number" value="20"></div>
+<div><label>Q2</label><input id="q2" type="number" value="20"></div>
+</div>
+<label>Resuspension volume (µL)</label><input id="resus_ul" type="number" value="1000">
+<button class="primary" onclick="calcAndSaveCount()">Calculate + Save</button>
+<div id="countResult" class="result"></div>
+</div>
+</section>
+
+<section id="pgclc" class="page">
+<div class="card">
+<h2>PGCLC Induction Seeding</h2>
+<div class="hint">Default 5000 cells/well, total 100 µL/well</div>
+<label>Batch ID</label><input id="pg_seed_batch">
+<label>Cells/µL</label><input id="pg_cells_ul" type="number">
+<div class="grid2">
+<div><label>Target cells/well</label><input id="pg_target" type="number" value="5000"></div>
+<div><label>Final volume/well (µL)</label><input id="pg_final" type="number" value="100"></div>
+</div>
+<div class="grid2">
+<div><label>Desired wells</label><input id="pg_desired" type="number" value="60"></div>
+<div><label>Extra wells</label><input id="pg_extra" type="number" value="10"></div>
+</div>
+<button class="primary" onclick="calcAndSavePGCLCSeeding()">Calculate + Save</button>
+<div id="pgSeedResult" class="result"></div>
+</div>
+</section>
+
+<section id="expansion" class="page">
+<div class="card">
+<h2>Expansion Culture Seeding</h2>
+<div class="hint">หลัง FACS ได้ PGCLCs แล้วเอามา expansion; คำนวณจำนวน well, cell volume, medium add ให้ total = 100 µL/well</div>
+<label>Batch ID</label><input id="exp_batch">
+<label>Culture day start</label><input id="exp_cday" placeholder="c1 / c12">
+<label>Cells/µL after FACS/counting</label><input id="exp_cells_ul" type="number" placeholder="e.g. 200">
+<label>Total available cells</label><input id="exp_total_cells" type="number" placeholder="optional e.g. 350000">
+<div class="grid2">
+<div><label>Target cells/well</label><input id="exp_target" type="number" value="5000"></div>
+<div><label>Final volume/well (µL)</label><input id="exp_final" type="number" value="100"></div>
+</div>
+<div class="grid2">
+<div><label>Desired wells</label><input id="exp_desired" type="number" placeholder="optional"></div>
+<div><label>Extra wells</label><input id="exp_extra" type="number" value="0"></div>
+</div>
+<button class="primary" onclick="calcAndSaveExpansion()">Calculate Expansion Seeding + Save</button>
+<div id="expResult" class="result"></div>
+</div>
+</section>
+
+<section id="passage" class="page">
+<div class="card">
+<h2>Dilution Passage Calculator · c1 → c365</h2>
+<div class="hint">ใช้ Culture Day เป็นแกนหลัก เช่น c40, c82; split เป็น event รอง เช่น 1→4</div>
+<label>Batch ID</label><input id="split_batch">
+<label>Culture day</label><input id="split_cday" placeholder="c40 / c82 / c365">
+<label>Cells counted in one well</label><input id="split_cells" type="number" value="20000">
+<div class="grid2">
+<div>
+<label>Split ratio</label>
+<select id="split_ratio"><option value="2">1→2</option><option value="3">1→3</option><option value="4" selected>1→4</option><option value="6">1→6</option><option value="8">1→8</option></select>
+</div>
+<div><label>Target transfer volume/new well (µL)</label><input id="transfer_ul" type="number" value="30"></div>
+</div>
+<label>Accumax added to original well (µL)</label><input id="accumax_ul" type="number" value="30">
+<label>Notes</label><textarea id="split_notes" placeholder="medium condition, morphology, AG+VT+ trend"></textarea>
+<button class="primary" onclick="calcAndSaveSplit()">Calculate Dilution Passage + Save</button>
+<div id="splitResult" class="result"></div>
+</div>
+</section>
+
+<section id="data" class="page">
+<div class="card">
+<h2>Database / Export</h2>
+<div class="hint">ข้อมูลเก็บใน browser เครื่องนี้ ควร Export CSV/JSON เป็นระยะ</div>
+<button class="secondary" onclick="renderData()">Refresh</button>
+<button class="secondary" onclick="exportCSV()">Export CSV</button>
+<button class="secondary" onclick="exportJSON()">Export JSON backup</button>
+<button class="danger" onclick="clearAll()">Clear All Data</button>
+</div>
+<div class="card">
+<h2>Records</h2>
+<div id="dataTable" class="scroll"></div>
+</div>
+</section>
 </main>
+
+<nav>
+<button id="nav_home" class="active" onclick="showPage('home')">Home</button>
+<button id="nav_batch" onclick="showPage('batch')">Batch</button>
+<button id="nav_count" onclick="showPage('count')">Count</button>
+<button id="nav_pgclc" onclick="showPage('pgclc')">PGCLC</button>
+<button id="nav_expansion" onclick="showPage('expansion')">Expand</button>
+<button id="nav_passage" onclick="showPage('passage')">Passage</button>
+</nav>
+
 <script>
-const KEY='bupi_pgclc_lab_v3';
-let db=load();
-function load(){try{return JSON.parse(localStorage.getItem(KEY))||{batches:[],cellCounts:[],seedings:[],timelines:[],facs:[]}}catch(e){return{batches:[],cellCounts:[],seedings:[],timelines:[],facs:[]}}}
-function persist(){localStorage.setItem(KEY,JSON.stringify(db));render()}
-function val(id){return document.getElementById(id).value.trim()} function num(id){return parseFloat(val(id)||0)}
-function showTab(id){document.querySelectorAll('.view').forEach(x=>x.classList.add('hide'));document.getElementById(id).classList.remove('hide');document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));let t=document.getElementById('t-'+id); if(t)t.classList.add('active');render()}
-function saveBatch(){let id=val('batchId'); if(!id)return alert('Batch ID is required'); let b=db.batches.find(x=>x.id===id)||{id}; Object.assign(b,{date:val('batchDate'),cellLine:val('cellLine'),clone:val('clone'),genotype:val('genotype'),dtag:val('dtag'),ipscStatus:val('ipscStatus'),imelcStatus:val('imelcStatus'),pgclcStatus:val('pgclcStatus'),facsStatus:val('facsStatus'),notes:val('notes'),updated:new Date().toISOString()}); if(!db.batches.find(x=>x.id===id))db.batches.unshift(b); persist(); alert('Saved')}
-function deleteBatch(){let id=val('batchId'); if(!id||!confirm('Delete batch '+id+'?'))return; db.batches=db.batches.filter(x=>x.id!==id); persist()}
-function editBatch(id){let b=db.batches.find(x=>x.id===id); if(!b)return; ['batchId','batchDate','cellLine','clone','genotype','dtag','ipscStatus','imelcStatus','pgclcStatus','facsStatus','notes'].forEach(k=>{}); batchId.value=b.id; batchDate.value=b.date||''; cellLine.value=b.cellLine||''; clone.value=b.clone||''; genotype.value=b.genotype||''; dtag.value=b.dtag||''; ipscStatus.value=b.ipscStatus||'missing'; imelcStatus.value=b.imelcStatus||'missing'; pgclcStatus.value=b.pgclcStatus||'missing'; facsStatus.value=b.facsStatus||'missing'; notes.value=b.notes||''; showTab('batch')}
-function completion(b){let arr=[b.ipscStatus,b.imelcStatus,b.pgclcStatus,b.facsStatus]; return Math.round(arr.filter(x=>x==='done').length/4*100)}
-function calcCellCount(){let avg=(num('q1')+num('q2'))/Math.max(num('quadrants'),1); let dilution=(num('cellVol')+num('tbVol'))/Math.max(num('cellVol'),1); let cellsMl=avg*1e4*dilution; let rec={batchId:val('ccBatch'),date:new Date().toISOString(),q1:num('q1'),q2:num('q2'),quadrants:num('quadrants'),cellsMl}; db.cellCounts.unshift(rec); ccResult.textContent=`Average cells/quadrant: ${avg.toFixed(1)}\nDilution factor: ${dilution.toFixed(2)}\nConcentration: ${Math.round(cellsMl).toLocaleString()} cells/mL`; persist()}
-function calcSeeding(){let total=num('targetCells')*num('wells')*(1+num('extraPct')/100); let volCells=total/Math.max(num('seedConc'),1)*1000; let totalVol=num('finalVol')*num('wells')*(1+num('extraPct')/100); let medium=Math.max(totalVol-volCells,0); db.seedings.unshift({batchId:val('seedBatch'),date:new Date().toISOString(),total,volCells,medium}); seedResult.textContent=`Total cells needed: ${Math.round(total).toLocaleString()}\nCell suspension: ${volCells.toFixed(2)} µL\nMedium: ${medium.toFixed(2)} µL\nTotal volume: ${totalVol.toFixed(2)} µL`; persist()}
-function addHours(d,h){let x=new Date(d); x.setHours(x.getHours()+h); return x} function fmt(d){return d.toLocaleString()}
-function calcTimeline(){let d0=new Date(val('day0')); if(isNaN(d0))return alert('Please enter Day 0'); let imelcStart=addHours(d0,num('growthDays')*24); let pgclcStart=addHours(imelcStart,num('imelcHours')); let facs=addHours(pgclcStart,num('pgclcDays')*24); db.timelines.unshift({batchId:val('tlBatch'),day0:val('day0'),imelcStart,pgclcStart,facs}); tlResult.textContent=`Day 0 iPSC: ${fmt(d0)}\niMeLC induction: ${fmt(imelcStart)}\nPGCLC induction / c0: ${fmt(pgclcStart)}\nFACS / c${num('pgclcDays')}: ${fmt(facs)}`; persist()}
-function saveFACS(){let id=val('facsBatch'); if(!id)return alert('Batch ID is required'); db.facs.unshift({batchId:id,date:val('facsDate'),ag:num('ag'),vt:num('vt'),agvt:num('agvt'),yieldCells:num('yieldCells'),notes:val('facsNotes'),created:new Date().toISOString()}); let b=db.batches.find(x=>x.id===id); if(b)b.facsStatus='done'; persist(); alert('FACS saved')}
-function render(){let total=db.batches.length, facs=db.facs.length, complete=db.batches.filter(b=>completion(b)===100).length, missing=db.batches.filter(b=>completion(b)<100).length; stats.innerHTML=`<div class=stat><b>${total}</b>Batches</div><div class=stat><b>${facs}</b>FACS records</div><div class=stat><b>${complete}</b>Complete</div><div class=stat><b>${missing}</b>Incomplete</div>`; batchIds.innerHTML=db.batches.map(b=>`<option value="${b.id}">`).join(''); let q=(search?.value||'').toLowerCase(); batchList.innerHTML=db.batches.filter(b=>JSON.stringify(b).toLowerCase().includes(q)).map(b=>{let c=completion(b);return `<div class=item><b class=mono>${b.id}</b><br><span class=muted>${b.cellLine||''} ${b.clone||''} ${b.genotype||''} ${b.dtag||''}</span><br><span class="pill ${b.ipscStatus==='done'?'good':'warn'}">iPSC ${b.ipscStatus}</span><span class="pill ${b.imelcStatus==='done'?'good':'warn'}">iMeLC ${b.imelcStatus}</span><span class="pill ${b.pgclcStatus==='done'?'good':'warn'}">PGCLC ${b.pgclcStatus}</span><span class="pill ${b.facsStatus==='done'?'good':'warn'}">FACS ${b.facsStatus}</span><span class="pill ${c===100?'good':'bad'}">${c}%</span><br><button class=smallbtn onclick="editBatch('${b.id}')">Edit</button></div>`}).join('')||'<p class=muted>No batch yet.</p>'; facsList.innerHTML=db.facs.slice(0,20).map(f=>`<div class=item><b>${f.batchId}</b> · ${f.date||''}<br>AG+ ${f.ag}% · VT+ ${f.vt}% · AG+VT+ ${f.agvt}% · Yield ${f.yieldCells||''}<br><span class=muted>${f.notes||''}</span></div>`).join('')}
-function csv(rows){if(!rows.length)return ''; let keys=[...new Set(rows.flatMap(Object.keys))]; return [keys.join(','),...rows.map(r=>keys.map(k=>'"'+String(r[k]??'').replaceAll('"','""')+'"').join(','))].join('\n')}
-function download(name,text,type='text/plain'){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();URL.revokeObjectURL(a.href)}
-function exportCSV(kind){download(`bupi_${kind}.csv`,csv(db[kind]||[]),'text/csv')}
-function backupJSON(){download('bupi_pgclc_lab_backup.json',JSON.stringify(db,null,2),'application/json')}
-function restoreJSON(){let f=restoreFile.files[0]; if(!f)return alert('Choose JSON'); let r=new FileReader(); r.onload=()=>{try{db=JSON.parse(r.result);persist();alert('Restored')}catch(e){alert('Invalid JSON')}}; r.readAsText(f)}
-function clearAll(){if(confirm('Clear all local data? Backup first.')){localStorage.removeItem(KEY);db=load();render()}}
-if('serviceWorker' in navigator){navigator.serviceWorker.register('service-worker.js').catch(()=>{})}
-render();
+const STORE="bupi_pgclc_v3_records";
+function records(){return JSON.parse(localStorage.getItem(STORE)||"[]")}
+function setRecords(x){localStorage.setItem(STORE,JSON.stringify(x))}
+function addRecord(type,data){const r=records();r.push({type,saved_at:new Date().toISOString(),...data});setRecords(r);updateHome();renderData(false)}
+function val(id){return document.getElementById(id).value}
+function num(id){return Number(val(id))||0}
+function pad(n,w=3){return String(n).padStart(w,"0")}
+function pad2(n){return String(n).padStart(2,"0")}
+function showPage(id){
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+ const nb=document.getElementById("nav_"+id); if(nb) nb.classList.add("active");
+ if(id==="data")renderData(); if(id==="home")updateHome()
+}
+function setSubBatchFromCondition(){
+ const c=val("condition_label");
+ if(c==="medium")document.getElementById("sub_batch_no").value=1;
+ if(c==="DMSO")document.getElementById("sub_batch_no").value=2;
+ if(c==="dTAG")document.getElementById("sub_batch_no").value=3;
+}
+function suggestBatchId(){
+ let prefix=val("id_prefix")==="CUSTOM" ? (val("custom_prefix")||"CUSTOM-PGCLC") : val("id_prefix");
+ let main=pad(num("main_batch_no")||1,3);
+ let sub=pad2(num("sub_batch_no")||1);
+ let id=prefix+"-"+main+"-"+sub;
+ document.getElementById("batch_id").value=id;
+ document.getElementById("batchSuggest").innerHTML="Suggested Batch ID:<br><b>"+id+"</b><br><span class='hint'>-01 medium, -02 DMSO, -03 dTAG</span>";
+}
+function applySexDefault(){document.getElementById("imelc_hours").value=val("sex_line")==="Female"?54:48}
+function addHours(dt,h){return new Date(dt.getTime()+h*3600*1000)}
+function addDays(dt,d){return addHours(dt,d*24)}
+function fmtDate(d){return d.toLocaleString([], {year:"numeric",month:"short",day:"2-digit",hour:"2-digit",minute:"2-digit"})}
+function timelineFromInputs(){const start=new Date(val("start_dt"));const imelcStart=addDays(start,num("ipsc_days"));const pgclcStart=addHours(imelcStart,num("imelc_hours"));const facs=addDays(pgclcStart,num("pgclc_days"));return{start,imelcStart,pgclcStart,facs}}
+function saveBatch(){
+ const t=timelineFromInputs(), batchId=val("batch_id");
+ addRecord("batch",{batch_id:batchId,cell_line:val("cell_line"),sex:val("sex_line"),condition:val("condition_label"),start_datetime:val("start_dt"),ipsc_growth_days:num("ipsc_days"),imelc_duration_hr:num("imelc_hours"),pgclc_duration_days:num("pgclc_days"),imelc_start:t.imelcStart.toISOString(),pgclc_start:t.pgclcStart.toISOString(),facs_due:t.facs.toISOString(),notes:val("batch_notes")});
+ ["count_batch","pg_seed_batch","exp_batch","split_batch"].forEach(id=>document.getElementById(id).value=batchId);
+ document.getElementById("timelineResult").innerHTML="<span class='pill'>"+batchId+"</span><br>Day 0 iPSC: <b>"+fmtDate(t.start)+"</b><br>Day "+num("ipsc_days")+" iMeLC: <b>"+fmtDate(t.imelcStart)+"</b><br>Day "+(num("ipsc_days")+num("imelc_hours")/24).toFixed(2)+" PGCLC: <b>"+fmtDate(t.pgclcStart)+"</b><br>FACS due: <b>"+fmtDate(t.facs)+"</b>";
+}
+function calcAndSaveCount(){
+ const q1=num("q1"),q2=num("q2"),resus=num("resus_ul"),sum=q1+q2,cellsMl=sum*10000,cellsUl=cellsMl/1000,total=cellsUl*resus;
+ document.getElementById("countResult").innerHTML="Q1+Q2 = <b>"+sum+"</b><br>Cell concentration = <b>"+cellsMl.toLocaleString()+" cells/mL</b><br>= <b>"+cellsUl.toFixed(2)+" cells/µL</b><br>Total cells = <b>"+Math.round(total).toLocaleString()+"</b>";
+ document.getElementById("pg_cells_ul").value=cellsUl.toFixed(2); document.getElementById("exp_cells_ul").value=cellsUl.toFixed(2); document.getElementById("exp_total_cells").value=Math.round(total);
+ addRecord("cell_count",{batch_id:val("count_batch"),method:"Bupi Shortcut",q1,q2,resuspension_ul:resus,cells_per_ml:cellsMl,cells_per_ul:cellsUl,total_cells:total});
+}
+function seedingCalc(cellsUl,target,finalV,desired,extra,totalAvail){
+ let wells = desired ? desired + extra : Math.floor(totalAvail/target);
+ if(!wells || wells<0) wells=0;
+ const cellV=target/cellsUl, medV=finalV-cellV, totalCell=cellV*wells,totalMed=medV*wells,totalNeed=target*wells;
+ return{wells,cellV,medV,totalCell,totalMed,totalNeed}
+}
+function recipeHTML(x){
+ const warn=x.medV<0?"<br><span class='bad'>Cell volume มากกว่า final volume/well</span>":"";
+ return "Recommended wells: <b>"+x.wells+"</b><br>Cells needed: <b>"+Math.round(x.totalNeed).toLocaleString()+"</b><br>Cell volume: <b>"+x.cellV.toFixed(2)+" µL/well</b><br>Medium add: <b>"+x.medV.toFixed(2)+" µL/well</b>"+warn+"<br><br>Total cell volume: <b>"+x.totalCell.toFixed(2)+" µL</b><br>Total medium to add: <b>"+x.totalMed.toFixed(2)+" µL</b><br>Total mix: <b>"+(x.totalCell+x.totalMed).toFixed(2)+" µL</b>";
+}
+function calcAndSavePGCLCSeeding(){
+ const x=seedingCalc(num("pg_cells_ul"),num("pg_target"),num("pg_final"),num("pg_desired"),num("pg_extra"),0);
+ document.getElementById("pgSeedResult").innerHTML=recipeHTML(x);
+ addRecord("pgclc_induction_seeding",{batch_id:val("pg_seed_batch"),cells_per_ul:num("pg_cells_ul"),target_cells_per_well:num("pg_target"),final_volume_ul:num("pg_final"),desired_wells:num("pg_desired"),extra_wells:num("pg_extra"),...x});
+}
+function calcAndSaveExpansion(){
+ const desired=num("exp_desired"), totalAvail=num("exp_total_cells");
+ const x=seedingCalc(num("exp_cells_ul"),num("exp_target"),num("exp_final"),desired,num("exp_extra"),totalAvail);
+ const maxWells = totalAvail ? Math.floor(totalAvail/num("exp_target")) : "";
+ document.getElementById("expResult").innerHTML="Culture day start: <b>"+val("exp_cday")+"</b><br>"+recipeHTML(x)+(maxWells!==""?"<br><br>Max wells from total cells: <b>"+maxWells+"</b>":"");
+ addRecord("expansion_culture_seeding",{batch_id:val("exp_batch"),culture_day:val("exp_cday"),cells_per_ul:num("exp_cells_ul"),total_available_cells:totalAvail,target_cells_per_well:num("exp_target"),final_volume_ul:num("exp_final"),desired_wells:desired,extra_wells:num("exp_extra"),...x});
+}
+function calcAndSaveSplit(){
+ const cells=num("split_cells"),split=num("split_ratio"),transfer=num("transfer_ul"),accumax=num("accumax_ul"),totalVol=split*transfer,medium=totalVol-accumax,newCells=cells/split;
+ document.getElementById("splitResult").innerHTML="Culture day: <b>"+val("split_cday")+"</b><br>Split 1→<b>"+split+"</b><br>Expected cells/new well: <b>"+Math.round(newCells).toLocaleString()+"</b><br>Total volume after detach: <b>"+totalVol+" µL</b><br>Accumax: <b>"+accumax+" µL</b><br>Medium to add: <b>"+medium.toFixed(2)+" µL</b><br><span class='hint'>Transfer "+transfer+" µL ไปแต่ละ well ใหม่</span>";
+ addRecord("dilution_passage_cday",{batch_id:val("split_batch"),culture_day:val("split_cday"),cells_in_one_well:cells,split_ratio:"1:"+split,transfer_ul_per_new_well:transfer,accumax_ul:accumax,total_volume_after_detach_ul:totalVol,medium_to_add_ul:medium,expected_cells_per_new_well:newCells,notes:val("split_notes")});
+}
+function updateHome(){
+ const r=records(), batches=r.filter(x=>x.type==="batch").slice(-5).reverse(), exp=r.filter(x=>x.type==="expansion_culture_seeding"), pass=r.filter(x=>x.type==="dilution_passage_cday");
+ document.getElementById("homeSummary").innerHTML="<div class='big'>"+r.length+"</div>records saved<br><span class='pill'>"+batches.length+" recent batches</span><span class='pill'>"+exp.length+" expansion</span><span class='pill'>"+pass.length+" passage</span>";
+ document.getElementById("recentBatches").innerHTML=batches.length?batches.map(b=>"<div class='result'><b>"+b.batch_id+"</b><br>"+b.cell_line+" · "+b.condition+"<br>FACS due: "+(b.facs_due?fmtDate(new Date(b.facs_due)):"")+"</div>").join(""):"<p class='hint'>No batch yet.</p>";
+}
+function renderData(){
+ const r=records(); if(!r.length){document.getElementById("dataTable").innerHTML="<p class='hint'>No records yet.</p>";return}
+ const keys=[...new Set(r.flatMap(o=>Object.keys(o)))];
+ let html="<table><thead><tr>"+keys.map(k=>"<th>"+k+"</th>").join("")+"</tr></thead><tbody>";
+ html+=r.map(o=>"<tr>"+keys.map(k=>"<td>"+(o[k]??"")+"</td>").join("")+"</tr>").join("");
+ html+="</tbody></table>"; document.getElementById("dataTable").innerHTML=html;
+}
+function downloadBlob(content,filename,type){const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;a.click();URL.revokeObjectURL(url)}
+function exportCSV(){const r=records();if(!r.length){alert("No data");return}const keys=[...new Set(r.flatMap(o=>Object.keys(o)))];const csv=[keys.join(",")].concat(r.map(o=>keys.map(k=>"\""+String(o[k]??"").replaceAll('"','""')+"\"").join(","))).join("\n");downloadBlob(csv,"bupi_pgclc_v3_records.csv","text/csv;charset=utf-8;")}
+function exportJSON(){downloadBlob(JSON.stringify(records(),null,2),"bupi_pgclc_v3_backup.json","application/json")}
+function clearAll(){if(confirm("Delete all local data?")){localStorage.removeItem(STORE);updateHome();renderData()}}
+function init(){
+ const now=new Date(); now.setMinutes(now.getMinutes()-now.getTimezoneOffset());
+ const s=now.toISOString().slice(0,16); document.getElementById("start_dt").value=s;
+ suggestBatchId(); updateHome();
+ if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").catch(()=>{})}
+}
+init();
 </script>
 </body>
 </html>

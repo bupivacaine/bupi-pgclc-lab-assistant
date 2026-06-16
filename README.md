@@ -1,17 +1,21 @@
 # Bupi PGCLC Lab Assistant v3
 
-Mobile-first PWA for REV1-dTAG PGCLC workflow.
+New in v3:
+- Suggested Batch ID generator:
+  - REV1-049-PGCLC-001-01
+  - REV1-049-PGCLC-001-02
+  - REV1-049-PGCLC-001-03
+  - REV1-052-PGCLC-001-01
+  - WT-NCLCN261-PGCLC-001-01
+- Expansion Culture Seeding Calculator after FACS:
+  - recommended wells
+  - cell volume/well
+  - medium to add/well
+  - total volume = 100 uL/well default
+- Dilution Passage Calculator restored:
+  - culture day c1 to c365
+  - split event 1:2, 1:3, 1:4, 1:6, 1:8
+- Bupi Shortcut cell count
+- CSV/JSON export
 
-## Features
-- Batch database with optional iPSC/iMeLC/PGCLC/FACS stages
-- FACS-first data entry supported by Batch ID
-- Bupi Shortcut™ cell count calculator
-- PGCLC seeding calculator
-- Culture timeline calculator using c day labels
-- FACS log
-- Search batches
-- Dashboard statistics
-- Export CSV
-- Backup / Restore JSON
-
-Data are stored locally in browser Local Storage. Backup JSON regularly.
+Deploy with GitHub Pages or Netlify, then open in Safari and Add to Home Screen.

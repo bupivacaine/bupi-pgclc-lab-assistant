@@ -1,10 +1,10 @@
 {
-  "name": "Bupi PGCLC Lab Assistant v3",
+  "name": "Bupi PGCLC Lab Assistant v4",
   "short_name": "Bupi PGCLC",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f6f7fb",
   "theme_color": "#1f2937",
-  "description": "Mobile-first PGCLC calculator with suggested batch IDs, expansion culture, and c-day dilution passage.",
+  "description": "PGCLC calculator, FACS, expansion and dilution passage tracker.",
   "icons": []
 }

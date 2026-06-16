@@ -1,21 +1,20 @@
-# Bupi PGCLC Lab Assistant v3
+# Bupi PGCLC Lab Assistant v4
 
-New in v3:
-- Suggested Batch ID generator:
-  - REV1-049-PGCLC-001-01
-  - REV1-049-PGCLC-001-02
-  - REV1-049-PGCLC-001-03
-  - REV1-052-PGCLC-001-01
-  - WT-NCLCN261-PGCLC-001-01
-- Expansion Culture Seeding Calculator after FACS:
-  - recommended wells
-  - cell volume/well
-  - medium to add/well
-  - total volume = 100 uL/well default
-- Dilution Passage Calculator restored:
-  - culture day c1 to c365
-  - split event 1:2, 1:3, 1:4, 1:6, 1:8
-- Bupi Shortcut cell count
-- CSV/JSON export
+Updates:
+- Autofill Batch ID with line options:
+  - WT-NCLCN261
+  - KIN49-NCLCN261
+  - KIN52-NCLCN261
+  - Other
+- Conditions:
+  - none / medium only
+  - DMSO
+  - dTAG 50 nM
+  - dTAG 100 nM
+- Calculate-only vs Save/send-to-next-step workflow
+- FACS data can be sent to Expansion and Dilution Passage
+- Expansion Culture calculator with cell volume + medium to 100 uL/well
+- Dilution Passage for c10 to c365 using FACS-derived cell number
+- Database tab with search, CSV export, JSON backup
 
-Deploy with GitHub Pages or Netlify, then open in Safari and Add to Home Screen.
+Deploy via GitHub Pages or Netlify.

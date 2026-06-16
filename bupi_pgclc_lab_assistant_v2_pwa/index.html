@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Bupi PGCLC Lab Assistant v2</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1f2937">
+  <style>
+    :root {
+      --bg:#f6f7fb; --card:#ffffff; --ink:#111827; --muted:#6b7280;
+      --blue:#2563eb; --blue2:#dbeafe; --green:#059669; --red:#dc2626;
+      --border:#e5e7eb; --shadow:0 8px 22px rgba(0,0,0,.08);
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0; background:var(--bg); color:var(--ink);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      padding-bottom:82px;
+    }
+    header {
+      background:#1f2937; color:white; padding:16px 16px 18px;
+      position:sticky; top:0; z-index:10;
+    }
+    header h1 { margin:0; font-size:20px; }
+    header p { margin:4px 0 0; color:#d1d5db; font-size:12px; }
+    main { padding:14px; max-width:760px; margin:auto; }
+    .card {
+      background:var(--card); border-radius:18px; padding:16px;
+      box-shadow:var(--shadow); margin-bottom:14px;
+    }
+    h2 { font-size:18px; margin:0 0 10px; }
+    h3 { font-size:15px; margin:18px 0 6px; }
+    label { display:block; margin-top:11px; font-weight:650; font-size:13px; }
+    input, select, textarea {
+      width:100%; padding:11px 12px; margin-top:5px;
+      border:1px solid #cfd4dc; border-radius:12px; font-size:16px;
+      background:white;
+    }
+    textarea { min-height:72px; }
+    button {
+      border:0; border-radius:13px; padding:12px 13px; font-size:15px;
+      font-weight:750; margin-top:10px;
+    }
+    .primary { background:var(--blue); color:white; width:100%; }
+    .secondary { background:#e5e7eb; color:#111827; width:100%; }
+    .danger { background:#fee2e2; color:#991b1b; width:100%; }
+    .mini { width:auto; padding:8px 10px; font-size:13px; margin-right:6px; }
+    .result {
+      background:#eef4ff; border-radius:14px; padding:13px; margin-top:13px;
+      line-height:1.65; font-size:14px;
+    }
+    .hint { color:var(--muted); font-size:12px; line-height:1.45; }
+    .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+    .pill {
+      display:inline-block; padding:4px 9px; border-radius:999px;
+      background:var(--blue2); color:#1d4ed8; font-size:12px; font-weight:750;
+      margin:2px 4px 2px 0;
+    }
+    .page { display:none; }
+    .page.active { display:block; }
+    nav {
+      position:fixed; bottom:0; left:0; right:0; z-index:20;
+      background:white; border-top:1px solid var(--border);
+      display:grid; grid-template-columns:repeat(5,1fr);
+      padding-bottom:env(safe-area-inset-bottom);
+    }
+    nav button {
+      background:white; color:#6b7280; border-radius:0; margin:0; padding:9px 2px;
+      font-size:11px; font-weight:700;
+    }
+    nav button.active { color:var(--blue); background:#eff6ff; }
+    .big { font-size:22px; font-weight:850; }
+    table { width:100%; border-collapse:collapse; font-size:12px; }
+    th,td { border-bottom:1px solid #eee; padding:7px; text-align:left; vertical-align:top; }
+    th { background:#f9fafb; position:sticky; top:0; }
+    .scroll { overflow-x:auto; max-height:460px; }
+    .ok { color:var(--green); font-weight:800; }
+    .warn { color:#b45309; font-weight:800; }
+    .bad { color:var(--red); font-weight:800; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Bupi PGCLC Lab Assistant v2</h1>
+  <p>Mobile-first PWA · Bupi Shortcut™ · REV1-dTAG batch tracker</p>
+</header>
+
+<main>
+  <section id="home" class="page active">
+    <div class="card">
+      <h2>Dashboard</h2>
+      <div class="hint">ใช้ Batch ID เป็นตัวเชื่อม iPSC → iMeLC → PGCLC → FACS → Differentiation Culture (c day)</div>
+      <div id="homeSummary" class="result"></div>
+      <button class="primary" onclick="showPage('batch')">+ New / Edit Batch</button>
+    </div>
+    <div class="card">
+      <h2>Recent Batches</h2>
+      <div id="recentBatches"></div>
+    </div>
+  </section>
+
+  <section id="batch" class="page">
+    <div class="card">
+      <h2>Batch Setup</h2>
+      <label>Batch ID</label>
+      <input id="batch_id" placeholder="REV1dTAG49_DMSO_20260616_A">
+      <div class="grid2">
+        <div>
+          <label>Cell line</label>
+          <select id="cell_line">
+            <option>WT</option><option>REV1-dTAG #49</option><option>REV1-dTAG #52</option>
+            <option>REV1 KO</option><option>REV7 KO</option><option>Custom</option>
+          </select>
+        </div>
+        <div>
+          <label>Sex of line</label>
+          <select id="sex_line" onchange="applySexDefault()">
+            <option>Female</option><option>Male</option><option>Unknown</option>
+          </select>
+        </div>
+      </div>
+      <label>Treatment / condition</label>
+      <select id="treatment">
+        <option>DMSO</option><option>dTAG10</option><option>dTAG50</option>
+        <option>dTAG100</option><option>MMC</option><option>UV</option><option>Custom</option>
+      </select>
+      <label>Operator</label><input id="operator" value="Bupi">
+      <label>iPSC seeding date/time = Day 0</label><input id="start_dt" type="datetime-local">
+      <div class="grid2">
+        <div><label>iPSC growth days</label><input id="ipsc_days" type="number" value="6" step="0.25"></div>
+        <div><label>iMeLC duration (hr)</label><input id="imelc_hours" type="number" value="54"></div>
+      </div>
+      <label>PGCLC induction duration (days)</label><input id="pgclc_days" type="number" value="6" step="0.25">
+      <label>Notes</label><textarea id="batch_notes"></textarea>
+      <button class="primary" onclick="saveBatch()">Save Batch + Calculate Timeline</button>
+      <div id="timelineResult" class="result"></div>
+    </div>
+  </section>
+
+  <section id="count" class="page">
+    <div class="card">
+      <h2>Cell Count · Bupi Shortcut™</h2>
+      <div class="hint">Default: cells 7 µL + Trypan Blue 7 µL, count 2 quadrants. cells/mL = (Q1+Q2) × 10⁴</div>
+      <label>Batch ID</label><input id="count_batch">
+      <div class="grid2">
+        <div><label>Q1</label><input id="q1" type="number" value="20"></div>
+        <div><label>Q2</label><input id="q2" type="number" value="20"></div>
+      </div>
+      <label>Resuspension volume (µL)</label><input id="resus_ul" type="number" value="1000">
+      <button class="primary" onclick="calcAndSaveCount()">Calculate + Save</button>
+      <div id="countResult" class="result"></div>
+    </div>
+  </section>
+
+  <section id="calc" class="page">
+    <div class="card">
+      <h2>PGCLC / Differentiation Seeding</h2>
+      <label>Batch ID</label><input id="seed_batch">
+      <label>Cells/µL</label><input id="seed_cells_ul" type="number" placeholder="auto or enter">
+      <div class="grid2">
+        <div><label>Target cells/well</label><input id="target_per_well" type="number" value="5000"></div>
+        <div><label>Final volume/well (µL)</label><input id="final_per_well" type="number" value="100"></div>
+      </div>
+      <div class="grid2">
+        <div><label>Desired wells</label><input id="desired_wells" type="number" value="60"></div>
+        <div><label>Extra wells</label><input id="extra_wells" type="number" value="10"></div>
+      </div>
+      <label>Aggregate / well harvested count</label><input id="aggregate_no" type="number" placeholder="for PGCLC/aggregate later">
+      <button class="primary" onclick="calcAndSaveSeeding()">Calculate + Save Recipe</button>
+      <div id="seedResult" class="result"></div>
+    </div>
+
+    <div class="card">
+      <h2>Dilution Passage / Split Event</h2>
+      <label>Batch ID</label><input id="split_batch">
+      <label>Culture day (c)</label><input id="split_cday" placeholder="c40 / c82">
+      <label>Cells counted in one well</label><input id="split_cells" type="number" value="20000">
+      <div class="grid2">
+        <div>
+          <label>Split ratio</label>
+          <select id="split_ratio"><option value="2">1→2</option><option value="4" selected>1→4</option><option value="6">1→6</option><option value="8">1→8</option></select>
+        </div>
+        <div><label>Transfer volume/well (µL)</label><input id="transfer_ul" type="number" value="30"></div>
+      </div>
+      <label>Accumax (µL)</label><input id="accumax_ul" type="number" value="30">
+      <button class="primary" onclick="calcAndSaveSplit()">Calculate + Save Split</button>
+      <div id="splitResult" class="result"></div>
+    </div>
+  </section>
+
+  <section id="facs" class="page">
+    <div class="card">
+      <h2>FACS / Differentiation Culture</h2>
+      <label>Batch ID</label><input id="facs_batch">
+      <label>Date/time</label><input id="facs_dt" type="datetime-local">
+      <label>Culture day (c)</label><input id="facs_cday" placeholder="c12 / c27 / c82">
+      <label>Actual post-sort / total counted cells</label><input id="facs_total" type="number" placeholder="counting chamber result">
+      <div class="grid2">
+        <div><label>AG+/VT+ (%)</label><input id="agvtpp" type="number" step="0.01"></div>
+        <div><label>AG+/VT− (%)</label><input id="agp_vtn" type="number" step="0.01"></div>
+      </div>
+      <div class="grid2">
+        <div><label>AG−/VT+ (%)</label><input id="agn_vtp" type="number" step="0.01"></div>
+        <div><label>AG−/VT− (%)</label><input id="agn_vtn" type="number" step="0.01"></div>
+      </div>
+      <label>P12 / dedifferentiated cells (%)</label><input id="p12pct" type="number" step="0.01">
+      <label>Aggregates harvested</label><input id="facs_aggregates" type="number" placeholder="for PGCLC/aggregate">
+      <label>Notes</label><textarea id="facs_notes"></textarea>
+      <button class="primary" onclick="calcAndSaveFACS()">Calculate + Save FACS</button>
+      <div id="facsResult" class="result"></div>
+    </div>
+  </section>
+
+  <section id="data" class="page">
+    <div class="card">
+      <h2>Database / Export</h2>
+      <div class="hint">ข้อมูลเก็บใน browser เครื่องนี้ ควร Export CSV/JSON เป็นระยะ</div>
+      <button class="secondary" onclick="renderData()">Refresh</button>
+      <button class="secondary" onclick="exportCSV()">Export CSV</button>
+      <button class="secondary" onclick="exportJSON()">Export JSON backup</button>
+      <button class="danger" onclick="clearAll()">Clear All Data</button>
+    </div>
+    <div class="card">
+      <h2>Records</h2>
+      <div id="dataTable" class="scroll"></div>
+    </div>
+  </section>
+</main>
+
+<nav>
+  <button id="nav_home" class="active" onclick="showPage('home')">Home</button>
+  <button id="nav_batch" onclick="showPage('batch')">Batch</button>
+  <button id="nav_count" onclick="showPage('count')">Count</button>
+  <button id="nav_calc" onclick="showPage('calc')">Calc</button>
+  <button id="nav_facs" onclick="showPage('facs')">FACS</button>
+</nav>
+
+<script>
+const STORE="bupi_pgclc_v2_records";
+
+function records(){ return JSON.parse(localStorage.getItem(STORE)||"[]"); }
+function setRecords(x){ localStorage.setItem(STORE, JSON.stringify(x)); }
+function addRecord(type, data){
+  const r=records();
+  r.push({ type, saved_at:new Date().toISOString(), ...data });
+  setRecords(r); updateHome(); renderData(false);
+}
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+  const nb=document.getElementById("nav_"+id); if(nb) nb.classList.add("active");
+  if(id==="data") renderData();
+  if(id==="home") updateHome();
+}
+function fmtDate(d){ return d.toLocaleString([], {year:"numeric",month:"short",day:"2-digit",hour:"2-digit",minute:"2-digit"}); }
+function addHours(dt, h){ return new Date(dt.getTime()+h*3600*1000); }
+function addDays(dt, days){ return addHours(dt, days*24); }
+function val(id){ return document.getElementById(id).value; }
+function num(id){ return Number(val(id))||0; }
+
+function init(){
+  const now=new Date();
+  now.setMinutes(now.getMinutes()-now.getTimezoneOffset());
+  const s=now.toISOString().slice(0,16);
+  ["start_dt","facs_dt"].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=s; });
+  updateHome();
+  if("serviceWorker" in navigator){ navigator.serviceWorker.register("service-worker.js").catch(()=>{}); }
+}
+function applySexDefault(){
+  const sex=val("sex_line");
+  document.getElementById("imelc_hours").value = sex==="Female" ? 54 : 48;
+}
+function timelineFromInputs(){
+  const start=new Date(val("start_dt"));
+  const ipsc=num("ipsc_days"), imelc=num("imelc_hours"), pg=num("pgclc_days");
+  const imelcStart=addDays(start, ipsc);
+  const pgclcStart=addHours(imelcStart, imelc);
+  const facs=addDays(pgclcStart, pg);
+  return {start, imelcStart, pgclcStart, facs};
+}
+function saveBatch(){
+  const t=timelineFromInputs();
+  const batchId=val("batch_id");
+  addRecord("batch", {
+    batch_id:batchId, cell_line:val("cell_line"), sex:val("sex_line"),
+    treatment:val("treatment"), operator:val("operator"), start_datetime:val("start_dt"),
+    ipsc_growth_days:num("ipsc_days"), imelc_duration_hr:num("imelc_hours"),
+    pgclc_duration_days:num("pgclc_days"),
+    imelc_start:t.imelcStart.toISOString(), pgclc_start:t.pgclcStart.toISOString(), facs_due:t.facs.toISOString(),
+    notes:val("batch_notes")
+  });
+  document.getElementById("timelineResult").innerHTML =
+    `<span class="pill">${batchId}</span><br>
+    Day 0 iPSC: <b>${fmtDate(t.start)}</b><br>
+    Day ${num("ipsc_days")} iMeLC induction: <b>${fmtDate(t.imelcStart)}</b><br>
+    Day ${(num("ipsc_days")+num("imelc_hours")/24).toFixed(2)} PGCLC induction: <b>${fmtDate(t.pgclcStart)}</b><br>
+    FACS due: <b>${fmtDate(t.facs)}</b>`;
+}
+
+function calcAndSaveCount(){
+  const q1=num("q1"), q2=num("q2"), resus=num("resus_ul");
+  const total=q1+q2, cellsMl=total*10000, cellsUl=cellsMl/1000, totalCells=cellsUl*resus;
+  document.getElementById("countResult").innerHTML =
+    `Q1+Q2 = <b>${total}</b><br>
+    Cell concentration = <b>${cellsMl.toLocaleString()} cells/mL</b><br>
+    = <b>${cellsUl.toFixed(2)} cells/µL</b><br>
+    Total cells = <b>${Math.round(totalCells).toLocaleString()}</b>`;
+  document.getElementById("seed_cells_ul").value=cellsUl.toFixed(2);
+  addRecord("cell_count", { batch_id:val("count_batch"), q1, q2, resuspension_ul:resus, cells_per_ml:cellsMl, cells_per_ul:cellsUl, total_cells:totalCells, method:"Bupi Shortcut" });
+}
+function calcAndSaveSeeding(){
+  const cellsUl=num("seed_cells_ul"), target=num("target_per_well"), finalV=num("final_per_well");
+  const wells=num("desired_wells")+num("extra_wells");
+  const cellV=target/cellsUl, medV=finalV-cellV, totalCell=cellV*wells, totalMed=medV*wells;
+  const totalNeeded=target*wells;
+  const warning = medV < 0 ? `<br><span class="bad">Cell volume มากกว่า final volume/well</span>` : "";
+  document.getElementById("seedResult").innerHTML =
+    `Prepare wells: <b>${wells}</b><br>
+    Cells needed: <b>${totalNeeded.toLocaleString()}</b><br>
+    Cells: <b>${cellV.toFixed(2)} µL/well</b><br>
+    Medium: <b>${medV.toFixed(2)} µL/well</b>${warning}<br><br>
+    Master mix cells: <b>${totalCell.toFixed(2)} µL</b><br>
+    Master mix medium: <b>${totalMed.toFixed(2)} µL</b><br>
+    Total: <b>${(totalCell+totalMed).toFixed(2)} µL</b>`;
+  addRecord("seeding_recipe", { batch_id:val("seed_batch"), cells_per_ul:cellsUl, target_cells_per_well:target, final_volume_ul:finalV, desired_wells:num("desired_wells"), extra_wells:num("extra_wells"), total_wells:wells, cell_ul_per_well:cellV, medium_ul_per_well:medV, aggregate_no:val("aggregate_no") });
+}
+function calcAndSaveSplit(){
+  const cells=num("split_cells"), split=num("split_ratio"), transfer=num("transfer_ul"), accumax=num("accumax_ul");
+  const totalVol=split*transfer, medium=totalVol-accumax, newCells=cells/split;
+  document.getElementById("splitResult").innerHTML =
+    `Culture day: <b>${val("split_cday")}</b><br>
+    Split 1→<b>${split}</b><br>
+    Expected cells/new well: <b>${Math.round(newCells).toLocaleString()}</b><br>
+    Total volume after detach: <b>${totalVol} µL</b><br>
+    Accumax: <b>${accumax} µL</b><br>
+    Add medium: <b>${medium.toFixed(2)} µL</b>`;
+  addRecord("split_event", { batch_id:val("split_batch"), culture_day:val("split_cday"), cells_in_one_well:cells, split_ratio:"1:"+split, transfer_ul_per_well:transfer, accumax_ul:accumax, medium_to_add_ul:medium, expected_cells_per_new_well:newCells });
+}
+function calcAndSaveFACS(){
+  const total=num("facs_total"), agvt=num("agvtpp"), aggs=num("facs_aggregates");
+  const abs=total*agvt/100;
+  const perAgg = aggs ? total/aggs : "";
+  document.getElementById("facsResult").innerHTML =
+    `AG+/VT+ absolute count = <b>${Math.round(abs).toLocaleString()}</b><br>
+    Actual counted cells = <b>${Math.round(total).toLocaleString()}</b><br>
+    ${aggs ? `PGCLC/aggregate = <b>${perAgg.toFixed(2)}</b>` : `<span class="hint">ใส่ aggregates harvested เพื่อคำนวณ PGCLC/aggregate</span>`}`;
+  addRecord("facs_culture", {
+    batch_id:val("facs_batch"), datetime:val("facs_dt"), culture_day:val("facs_cday"),
+    actual_counted_cells:total, ag_pos_vt_pos_percent:agvt, ag_pos_vt_pos_absolute:abs,
+    ag_pos_vt_neg_percent:num("agp_vtn"), ag_neg_vt_pos_percent:num("agn_vtp"), ag_neg_vt_neg_percent:num("agn_vtn"),
+    p12_percent:num("p12pct"), aggregates_harvested:aggs, pgclc_per_aggregate:perAgg, notes:val("facs_notes")
+  });
+}
+function updateHome(){
+  const r=records();
+  const batches=r.filter(x=>x.type==="batch").slice(-5).reverse();
+  const facs=r.filter(x=>x.type==="facs_culture");
+  document.getElementById("homeSummary").innerHTML =
+    `<div class="big">${r.length}</div>records saved<br>
+     <span class="pill">${batches.length} recent batches</span>
+     <span class="pill">${facs.length} FACS records</span>`;
+  document.getElementById("recentBatches").innerHTML = batches.length ? batches.map(b =>
+    `<div class="result"><b>${b.batch_id}</b><br>${b.cell_line} · ${b.treatment}<br>
+    FACS due: ${b.facs_due ? fmtDate(new Date(b.facs_due)) : ""}</div>`).join("") : "<p class='hint'>No batch yet.</p>";
+}
+function renderData(){
+  const r=records();
+  if(!r.length){ document.getElementById("dataTable").innerHTML="<p class='hint'>No records yet.</p>"; return; }
+  const keys=[...new Set(r.flatMap(o=>Object.keys(o)))];
+  let html="<table><thead><tr>"+keys.map(k=>`<th>${k}</th>`).join("")+"</tr></thead><tbody>";
+  html+=r.map(o=>"<tr>"+keys.map(k=>`<td>${o[k]??""}</td>`).join("")+"</tr>").join("");
+  html+="</tbody></table>";
+  document.getElementById("dataTable").innerHTML=html;
+}
+function exportCSV(){
+  const r=records(); if(!r.length){ alert("No data"); return; }
+  const keys=[...new Set(r.flatMap(o=>Object.keys(o)))];
+  const csv=[keys.join(",")].concat(r.map(o=>keys.map(k=>`"${String(o[k]??"").replaceAll('"','""')}"`).join(","))).join("\n");
+  downloadBlob(csv, "bupi_pgclc_v2_records.csv", "text/csv;charset=utf-8;");
+}
+function exportJSON(){ downloadBlob(JSON.stringify(records(),null,2), "bupi_pgclc_v2_backup.json", "application/json"); }
+function downloadBlob(content, filename, type){
+  const blob=new Blob([content],{type}); const url=URL.createObjectURL(blob);
+  const a=document.createElement("a"); a.href=url; a.download=filename; a.click(); URL.revokeObjectURL(url);
+}
+function clearAll(){ if(confirm("Delete all local data?")){ localStorage.removeItem(STORE); updateHome(); renderData(); } }
+init();
+</script>
+</body>
+</html>
